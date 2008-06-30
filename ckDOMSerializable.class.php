@@ -13,13 +13,9 @@
  * Enter description here...
  *
  * @package    ckWsdlGenerator
- * @subpackage wsdl
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-class ckWsdlHttpBindingDecorator extends ckWsdlBindingDecorator
+interface ckDOMSerializable
 {
-  public abstract function serialize(DOMDocument $document)
-  {
-    return $this->getOperation()->serialize($document);
-  }
+  public function serialize(DOMDocument $document);
 }
