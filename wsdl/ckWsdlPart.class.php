@@ -16,7 +16,7 @@
  * @subpackage wsdl
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-class ckWsdlPart implements ISerializable
+class ckWsdlPart implements ckDOMSerializable
 {
   const ELEMENT_NAME = 'part';
   

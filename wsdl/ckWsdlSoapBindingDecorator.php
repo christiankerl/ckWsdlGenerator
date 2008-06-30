@@ -18,8 +18,16 @@
  */
 class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
 {
-  public abstract function serialize(DOMDocument $document)
+  public function serialize(DOMDocument $document)
   {
-    return $this->getOperation()->serialize($document);
+     $wsdl = ckXsdNamespace::get('wsdl');
+     $tns  = ckXsdNamespace::get('tns');
+     
+     $node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify(self::ELEMENT_NAME));
+     
+     $node->setAttribute('name', $this->getName());     
+     $node->setAttribute('type', $tns->qualify($this->getPortType()->getName()));
+          
+     return $node;
   }
 }

@@ -16,28 +16,41 @@
  * @subpackage wsdl
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-abstract class ckWsdlBindingDecorator implements ISerializable
+abstract class ckWsdlBindingDecorator implements ckDOMSerializable
 {
-  protected $operation = null;
+  const ELEMENT_NAME = 'binding';
   
-  /**
-   * Enter description here...
-   *
-   * @return ckWsdlOperation
-   */
-  public function getOperation()
+  protected $name;
+  protected $portType = null;  
+  
+  public function getName()
   {
-    return $this->operation;
+    return $this->name;
+  }
+  
+  public function setName($value)
+  {
+    $this->name = $value;
   }
   
   /**
    * Enter description here...
    *
-   * @param ckWsdlOperation $value
+   * @return ckWsdlPortType
    */
-  public function setOperation(ckWsdlOperation $value)
+  public function getPortType()
   {
-    $this->operation = $value;
+    return $this->portType;
+  }
+  
+  /**
+   * Enter description here...
+   *
+   * @param ckWsdlPortType $value
+   */
+  public function setPortType(ckWsdlPortType $value)
+  {
+    $this->portType = $value;
   }
   
   public abstract function serialize(DOMDocument $document);

@@ -16,7 +16,7 @@
  * @subpackage wsdl
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-class ckWsdlPortType implements ISerializable
+class ckWsdlPortType implements ckDOMSerializable
 {
   const ELEMENT_NAME = 'portType';
   

@@ -18,8 +18,8 @@
  */
 class ckWsdlHttpBindingDecorator extends ckWsdlBindingDecorator
 {
-  public abstract function serialize(DOMDocument $document)
+  public function serialize(DOMDocument $document)
   {
-    return $this->getOperation()->serialize($document);
+    return null;
   }
 }

@@ -16,7 +16,7 @@
  * @subpackage xsd
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-abstract class ckXsdType implements ISerializable
+abstract class ckXsdType implements ckDOMSerializable
 {
   protected static $typeRegistry = array();
   

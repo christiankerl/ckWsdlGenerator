@@ -16,7 +16,7 @@
  * @subpackage wsdl
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-class ckWsdlOperation implements ISerializable
+class ckWsdlOperation implements ckDOMSerializable
 {
   public static function create($name, ReflectionMethod $method)
   {
