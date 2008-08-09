@@ -19,7 +19,7 @@
 abstract class ckXsdType implements ckDOMSerializable
 {
   protected static $typeRegistry = array();
-  
+
   /**
    * Enter description here...
    *
@@ -27,7 +27,7 @@ abstract class ckXsdType implements ckDOMSerializable
    * @return ckXsdNamespace
    */
   public static function get($key)
-  {    
+  {
     if(isset(self::$typeRegistry[$key]))
     {
       return self::$typeRegistry[$key];
@@ -37,7 +37,7 @@ abstract class ckXsdType implements ckDOMSerializable
       return null;
     }
   }
-  
+
   /**
    * Enter description here...
    *
@@ -46,31 +46,31 @@ abstract class ckXsdType implements ckDOMSerializable
    * @param string $shortName
    */
   public static function set($key, $type)
-  {    
+  {
     self::$typeRegistry[$key] = $type;
   }
-  
+
   /**
    * Enter description here...
    *
    * @param string $typeName
    */
-  public static abstract function create($typeName);
-  
+  //public static abstract function create($typeName);
+
   /**
    * Enter description here...
    *
    * @var string
    */
   protected $name;
-  
+
   /**
    * Enter description here...
    *
    * @var ckXsdNamespace
    */
   protected $namespace;
-  
+
   /**
    * Enter description here...
    *
@@ -80,7 +80,7 @@ abstract class ckXsdType implements ckDOMSerializable
   {
     return $this->name;
   }
-  
+
   /**
    * Enter description here...
    *
@@ -90,7 +90,7 @@ abstract class ckXsdType implements ckDOMSerializable
   {
     $this->name = $value;
   }
-  
+
   /**
    * Enter description here...
    *
@@ -100,7 +100,7 @@ abstract class ckXsdType implements ckDOMSerializable
   {
     return $this->namespace;
   }
-  
+
   /**
    * Enter description here...
    *
@@ -110,12 +110,17 @@ abstract class ckXsdType implements ckDOMSerializable
   {
     $this->namespace = $value;
   }
-  
+
+  public function getNodeName()
+  {
+    return '';
+  }
+
   protected function __construct()
   {
-    
+
   }
-  
+
   /**
    * Enter description here...
    *
@@ -125,6 +130,9 @@ abstract class ckXsdType implements ckDOMSerializable
   {
     return $this->getNamespace()->qualify($this->getName());
   }
-  
-  public abstract function serialize(DOMDocument $document);
+
+  public function serialize(DOMDocument $document)
+  {
+
+  }
 }

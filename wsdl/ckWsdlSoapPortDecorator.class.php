@@ -16,50 +16,22 @@
  * @subpackage wsdl
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-class ckWsdlPortType implements ckDOMSerializable
+class ckWsdlSoapPortDecorator extends ckWsdlPortDecorator
 {
-  const ELEMENT_NAME = 'portType';
-
-  protected $name;
-  protected $operations = array();
-
-  public function getName()
-  {
-    return $this->name;
-  }
-
-  public function setName($value)
-  {
-    $this->name = $value;
-  }
-
-  public function addOperation(ckWsdlOperation $operation)
-  {
-    $this->operations[] = $operation;
-  }
-
-  public function getOperations()
-  {
-    return $this->operations;
-  }
-
-  public function getNodeName()
-  {
-    return self::ELEMENT_NAME;
-  }
-
   public function serialize(DOMDocument $document)
   {
     $wsdl = ckXsdNamespace::get('wsdl');
+    $tns  = ckXsdNamespace::get('tns');
+    $soap = ckXsdNamespace::get('soap');
 
     $node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify($this->getNodeName()));
 
     $node->setAttribute('name', $this->getName());
+    $node->setAttribute('binding', $tns->qualify($this->getBinding()->getName()));
 
-    foreach($this->getOperations() as $operation)
-    {
-      $node->appendChild($operation->serialize($document));
-    }
+    $address = $document->createElementNS($soap->getUrl(), $soap->qualify('address'));
+    $address->setAttribute('location', $this->getLocation());
+    $node->appendChild($address);
 
     return $node;
   }

@@ -41,7 +41,12 @@ class ckWsdlMessage implements ckDOMSerializable
   public function addPart(ckWsdlPart $part)
   {
     $this->parts[] = $part;
-  }  
+  }
+
+  public function getNodeName()
+  {
+    return self::ELEMENT_NAME;
+  }
   
   public function __construct($name)
   {
@@ -52,7 +57,7 @@ class ckWsdlMessage implements ckDOMSerializable
   {
     $wsdl = ckXsdNamespace::get('wsdl');
     
-    $node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify(self::ELEMENT_NAME));
+    $node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify($this->getNodeName()));
     
     $node->setAttribute('name', $this->getName());
     

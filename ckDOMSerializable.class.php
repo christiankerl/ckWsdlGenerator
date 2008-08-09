@@ -17,5 +17,6 @@
  */
 interface ckDOMSerializable
 {
+  public function getNodeName();
   public function serialize(DOMDocument $document);
 }

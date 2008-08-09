@@ -16,12 +16,13 @@
  * @subpackage wsdl
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-abstract class ckWsdlBindingDecorator implements ckDOMSerializable
+abstract class ckWsdlPortDecorator implements ckDOMSerializable
 {
-  const ELEMENT_NAME = 'binding';
+  const ELEMENT_NAME = 'port';
 
   protected $name;
-  protected $portType = null;
+  protected $location;
+  protected $binding = null;
 
   public function getName()
   {
@@ -33,24 +34,34 @@ abstract class ckWsdlBindingDecorator implements ckDOMSerializable
     $this->name = $value;
   }
 
-  /**
-   * Enter description here...
-   *
-   * @return ckWsdlPortType
-   */
-  public function getPortType()
+  public function getLocation()
   {
-    return $this->portType;
+    return $this->location;
+  }
+
+  public function setLocation($value)
+  {
+    $this->location = $value;
   }
 
   /**
    * Enter description here...
    *
-   * @param ckWsdlPortType $value
+   * @return ckWsdlBindingDecorator
    */
-  public function setPortType(ckWsdlPortType $value)
+  public function getBinding()
   {
-    $this->portType = $value;
+    return $this->binding;
+  }
+
+  /**
+   * Enter description here...
+   *
+   * @param ckWsdlBindingDecorator $value
+   */
+  public function setBinding(ckWsdlBindingDecorator $value)
+  {
+    $this->binding = $value;
   }
 
   public function getNodeName()
@@ -58,5 +69,5 @@ abstract class ckWsdlBindingDecorator implements ckDOMSerializable
     return self::ELEMENT_NAME;
   }
 
-//  public abstract function serialize(DOMDocument $document);
+  //public abstract function serialize(DOMDocument $document);
 }

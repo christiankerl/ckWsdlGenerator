@@ -16,12 +16,12 @@
  * @subpackage wsdl
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-abstract class ckWsdlBindingDecorator implements ckDOMSerializable
+class ckWsdlService implements ckDOMSerializable
 {
-  const ELEMENT_NAME = 'binding';
+  const ELEMENT_NAME = 'service';
 
   protected $name;
-  protected $portType = null;
+  protected $ports = array();
 
   public function getName()
   {
@@ -36,21 +36,21 @@ abstract class ckWsdlBindingDecorator implements ckDOMSerializable
   /**
    * Enter description here...
    *
-   * @return ckWsdlPortType
+   * @return ckWsdlPortDecorator
    */
-  public function getPortType()
+  public function getPorts()
   {
-    return $this->portType;
+    return $this->port;
   }
 
   /**
    * Enter description here...
    *
-   * @param ckWsdlPortType $value
+   * @param ckWsdlPortDecorator $value
    */
-  public function setPortType(ckWsdlPortType $value)
+  public function addPort(ckWsdlPortDecorator $value)
   {
-    $this->portType = $value;
+    $this->port[] = $value;
   }
 
   public function getNodeName()
@@ -58,5 +58,19 @@ abstract class ckWsdlBindingDecorator implements ckDOMSerializable
     return self::ELEMENT_NAME;
   }
 
-//  public abstract function serialize(DOMDocument $document);
+  public function serialize(DOMDocument $document)
+  {
+    $wsdl = ckXsdNamespace::get('wsdl');
+
+    $node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify($this->getNodeName()));
+
+    $node->setAttribute('name', $this->getName());
+
+    foreach($this->getPorts() as $port)
+    {
+      $node->appendChild($port->serialize($document));
+    }
+
+    return $node;
+  }
 }
