@@ -24,13 +24,26 @@ abstract class ckXsdType implements ckDOMSerializable
    * Enter description here...
    *
    * @param string $key
-   * @return ckXsdNamespace
+   *
+   * @return ckXsdType
    */
   public static function get($key)
   {
     if(isset(self::$typeRegistry[$key]))
     {
       return self::$typeRegistry[$key];
+    }
+    else if(ckXsdSimpleType::isSimpleType($key))
+    {
+      return self::set($key, ckXsdSimpleType::create($key));
+    }
+    else if(ckXsdArrayType::isArrayType($key))
+    {
+      return self::set($key, ckXsdArrayType::create($key));
+    }
+    else if(class_exists($key, true))
+    {
+      return self::set($key, ckXsdComplexType::create($key));
     }
     else
     {
@@ -43,19 +56,15 @@ abstract class ckXsdType implements ckDOMSerializable
    *
    * @param string $key
    * @param string $url
-   * @param string $shortName
+   *
+   * @return ckXsdType
    */
   public static function set($key, $type)
   {
     self::$typeRegistry[$key] = $type;
-  }
 
-  /**
-   * Enter description here...
-   *
-   * @param string $typeName
-   */
-  //public static abstract function create($typeName);
+    return $type;
+  }
 
   /**
    * Enter description here...
@@ -116,9 +125,10 @@ abstract class ckXsdType implements ckDOMSerializable
     return '';
   }
 
-  protected function __construct()
+  protected function __construct($name = null, ckXsdNamespace $namespace = null)
   {
-
+    $this->setName($name);
+    $this->setNamespace($namespace);
   }
 
   /**
@@ -129,10 +139,5 @@ abstract class ckXsdType implements ckDOMSerializable
   public function getQualifiedName()
   {
     return $this->getNamespace()->qualify($this->getName());
-  }
-
-  public function serialize(DOMDocument $document)
-  {
-
   }
 }

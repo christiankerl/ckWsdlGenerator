@@ -22,6 +22,27 @@ class ckWsdlOperation implements ckDOMSerializable
   {
     $result = new ckWsdlOperation();
     $result->setName($name);
+
+    $params = ckDocBlockParser::parseParameters($method->getDocComment());
+    $return = ckDocBlockParser::parseReturn($method->getDocComment());
+
+    $result->input = new ckWsdlMessage($name.'Request');
+
+    foreach($params as $param)
+    {
+      $type = ckXsdType::get($param['type']);
+
+      $result->input->addPart(new ckWsdlPart($param['name'], $type));
+    }
+
+    if(!is_null($return))
+    {
+      $type = ckXsdType::get($return['type']);
+
+      $result->output = new ckWsdlMessage($name.'Response');
+      $result->output->addPart(new ckWsdlPart('return', $type));
+    }
+
     return $result;
   }
 
@@ -64,6 +85,16 @@ class ckWsdlOperation implements ckDOMSerializable
   public function getOutput()
   {
     return $this->output;
+  }
+
+  /**
+   * Enter description here...
+   *
+   * @param ckWsdlMessage $value
+   */
+  public function setOutput(ckWsdlMessage $value)
+  {
+    $this->output = $value;
   }
 
   public function getNodeName()

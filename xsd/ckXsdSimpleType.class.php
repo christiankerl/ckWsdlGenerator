@@ -18,31 +18,32 @@
  */
 class ckXsdSimpleType extends ckXsdType
 {
-  public static function init()
+  protected static final $SIMPLE_TYPES = array('boolean', 'integer', 'float', 'string');
+
+  /**
+   * Enter description here...
+   *
+   * @param string $name
+   *
+   * @return boolean
+   */
+  public static function isSimpleType($name)
   {
-    self::create('int');
-    self::create('string');
-    self::create('float');
+    return in_array($name, self::$SIMPLE_TYPES);
   }
 
-  public static function create($typeName)
+  public static function create($name)
   {
-    $type = new ckXsdSimpleType();
-    $type->setName($typeName);
-    $type->setNamespace(ckXsdNamespace::get('xsd'));
-
-    self::set($typeName, $type);
-
-    return $type;
+    return new ckXsdSimpleType($name, ckXsdNamespace::get('xsd'));
   }
 
-  protected function __construct()
+  protected function __construct($name = null, ckXsdNamespace $namespace = null)
   {
-    parent::__construct();
+    parent::__construct($name, $namespace);
   }
 
   public function serialize(DOMDocument $document)
   {
-    return null;
+    throw new Exception('Not supported.');
   }
 }
