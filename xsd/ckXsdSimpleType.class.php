@@ -18,7 +18,7 @@
  */
 class ckXsdSimpleType extends ckXsdType
 {
-  protected static final $SIMPLE_TYPES = array('boolean', 'integer', 'float', 'string');
+  protected static $SIMPLE_TYPES = array('boolean', 'integer', 'float', 'string');
 
   /**
    * Enter description here...

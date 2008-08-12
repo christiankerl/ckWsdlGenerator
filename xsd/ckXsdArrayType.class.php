@@ -16,8 +16,9 @@
  * @subpackage xsd
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-class ckXsdArrayType extends ckXsdComplexType
+class ckXsdArrayType extends ckXsdType
 {
+  const ELEMENT_NAME = 'complexType';
   const ARRAY_SUFFIX = '[]';
   const NAME_PREFIX = 'ArrayOf';
 
@@ -67,6 +68,11 @@ class ckXsdArrayType extends ckXsdComplexType
   public function getElementType()
   {
     return $this->elementType;
+  }
+
+  public function getNodeName()
+  {
+    return self::ELEMENT_NAME;
   }
 
   protected function __construct($name = null, ckXsdNamespace $namespace = null, ckXsdType $elementType = null)
