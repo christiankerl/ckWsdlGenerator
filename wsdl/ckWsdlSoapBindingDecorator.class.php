@@ -55,7 +55,7 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
         foreach($operation->getInput()->getHeaderParts() as $header)
         {
           $header_node = $this->getSoapHeaderNode($document, $operation->getInput(), $header);
-          $header_nodes[] = $header_node;
+          $header_nodes[] = clone $header_node;
           $in_node->appendChild($header_node);
         }
 
