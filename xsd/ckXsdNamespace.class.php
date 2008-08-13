@@ -64,9 +64,11 @@ class ckXsdNamespace
    */
   public static function set($key, $url, $shortName = null)
   {
-    $shortName = is_null($shortName) ? $key : $shortName;
+    $ns = new ckXsdNamespace($shortName = is_null($shortName) ? $key : $shortName, $url);
 
-    self::$namespaceRegistry[$key] = new ckXsdNamespace($shortName, $url);
+    self::$namespaceRegistry[$key] = $ns;
+
+    return $ns;
   }
 
   protected $shortname;
