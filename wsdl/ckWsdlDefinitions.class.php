@@ -105,27 +105,21 @@ class ckWsdlDefinitions implements ckDOMSerializable
 
     // kind of hack to register all namespaces
     $node->setAttribute($tns->getXmlns(), $tns->getUrl());
-    $node->setAttribute($xsd->getXmlns(), $xsd->getUrl());
     $node->setAttribute($soapenc->getXmlns(), $soapenc->getUrl());
 
-    $types = $this->getTypes();
+    $schema_node = $document->createElementNS($xsd->getUrl(), $xsd->qualify('schema'));
+    $schema_node->setAttribute('xmlns', $xsd->getUrl());
+    $schema_node->setAttribute('targetNamespace', $tns->getUrl());
 
-    if(count($types) > 0)
+    foreach($this->getTypes() as $type)
     {
-      $schema_node = $document->createElementNS($xsd->getUrl(), $xsd->qualify('schema'));
-      $schema_node->setAttribute('xmlns', $xsd->getUrl());
-      $schema_node->setAttribute('targetNamespace', $tns->getUrl());
-
-      foreach($types as $type)
-      {
-        $schema_node->appendChild($type->serialize($document));
-      }
-
-      $types_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('types'));
-      $types_node->appendChild($schema_node);
-
-      $node->appendChild($types_node);
+      $schema_node->appendChild($type->serialize($document));
     }
+
+    $types_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('types'));
+    $types_node->appendChild($schema_node);
+
+    $node->appendChild($types_node);
 
     foreach($this->getPortTypes() as $portType)
     {
