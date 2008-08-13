@@ -64,6 +64,16 @@ abstract class ckXsdType implements ckDOMSerializable
   /**
    * Enter description here...
    *
+   * @return array
+   */
+  public static function getComplexAndArrayTypes()
+  {
+    return array_filter(ckXsdType::getAll(), array(__CLASS__, 'isComplexOrArrayType'));
+  }
+
+  /**
+   * Enter description here...
+   *
    * @param string $key
    * @param ckXsdType $url
    *
@@ -74,6 +84,11 @@ abstract class ckXsdType implements ckDOMSerializable
     self::$typeRegistry[$key] = $type;
 
     return $type;
+  }
+
+  private static function isComplexOrArrayType($input)
+  {
+    return $input instanceof ckXsdComplexType || $input instanceof ckXsdArrayType;
   }
 
   /**

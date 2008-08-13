@@ -37,7 +37,7 @@ class ckWsdlDefinitions implements ckDOMSerializable
 
   public function getTypes()
   {
-    return array_filter(ckXsdType::getAll(), array($this, 'isComplexOrArrayType'));
+    return ckXsdType::getComplexAndArrayTypes();
   }
 
   public function addPortType(ckWsdlPortType $value)
@@ -147,10 +147,5 @@ class ckWsdlDefinitions implements ckDOMSerializable
     }
 
     return $node;
-  }
-
-  private function isComplexOrArrayType($input)
-  {
-    return $input instanceof ckXsdComplexType || $input instanceof ckXsdArrayType;
   }
 }
