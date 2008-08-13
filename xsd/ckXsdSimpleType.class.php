@@ -20,6 +20,8 @@ class ckXsdSimpleType extends ckXsdType
 {
   protected static $SIMPLE_TYPES = array('boolean', 'integer', 'float', 'string');
 
+  protected static $ALIAS = array('int' => 'integer', 'bool' => 'boolean');
+
   /**
    * Enter description here...
    *
@@ -29,11 +31,16 @@ class ckXsdSimpleType extends ckXsdType
    */
   public static function isSimpleType($name)
   {
-    return in_array($name, self::$SIMPLE_TYPES);
+    return in_array($name, self::$SIMPLE_TYPES) || isset(self::$ALIAS[$name]);
   }
 
   public static function create($name)
   {
+    if(isset(self::$ALIAS[$name]))
+    {
+      $name = self::$ALIAS[$name];
+    }
+
     return new ckXsdSimpleType($name, ckXsdNamespace::get('xsd'));
   }
 

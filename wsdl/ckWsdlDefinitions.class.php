@@ -105,6 +105,7 @@ class ckWsdlDefinitions implements ckDOMSerializable
 
     // kind of hack to register all namespaces
     $node->setAttribute($tns->getXmlns(), $tns->getUrl());
+    $node->setAttribute($xsd->getXmlns(), $xsd->getUrl());
     $node->setAttribute($soapenc->getXmlns(), $soapenc->getUrl());
 
     $types = $this->getTypes();
