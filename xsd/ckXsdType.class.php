@@ -54,6 +54,16 @@ abstract class ckXsdType implements ckDOMSerializable
   /**
    * Enter description here...
    *
+   * @return array
+   */
+  public static function getAll()
+  {
+    return self::$typeRegistry;
+  }
+
+  /**
+   * Enter description here...
+   *
    * @param string $key
    * @param string $url
    *

@@ -16,7 +16,7 @@
  * @subpackage xsd
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-class ckXsdComplexTypeElement extends ckDOMSerializable
+class ckXsdComplexTypeElement implements ckDOMSerializable
 {
   const ELEMENT_NAME = 'element';
 

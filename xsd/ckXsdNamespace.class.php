@@ -30,6 +30,7 @@ class ckXsdNamespace
    * Enter description here...
    *
    * @param string $key
+   *
    * @return ckXsdNamespace
    */
   public static function get($key)
@@ -42,6 +43,16 @@ class ckXsdNamespace
     {
       return null;
     }
+  }
+
+  /**
+   * Enter description here...
+   *
+   * @return array
+   */
+  public static function getAll()
+  {
+    return self::$namespaceRegistry;
   }
 
   /**
@@ -79,6 +90,11 @@ class ckXsdNamespace
   public function setUrl($value)
   {
     $this->url = $value;
+  }
+
+  public function getXmlns()
+  {
+    return sprintf('xmlns:%s', $this->getShortName());
   }
 
   public function __construct($shortname, $url)
