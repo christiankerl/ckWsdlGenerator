@@ -11,7 +11,7 @@
 
 ckXsdNamespace::set('xsd', 'http://www.w3.org/2001/XMLSchema');
 ckXsdNamespace::set('soap', 'http://schemas.xmlsoap.org/wsdl/soap/');
-ckXsdNamespace::set('soaphttp', 'http://schemas.xmlsoap.org/soap/http/');
+ckXsdNamespace::set('soaphttp', 'http://schemas.xmlsoap.org/soap/http');
 ckXsdNamespace::set('soapenc', 'http://schemas.xmlsoap.org/soap/encoding/');
 ckXsdNamespace::set('wsdl', 'http://schemas.xmlsoap.org/wsdl/');
 

@@ -18,9 +18,9 @@
  */
 class ckXsdSimpleType extends ckXsdType
 {
-  protected static $SIMPLE_TYPES = array('boolean', 'integer', 'float', 'string');
+  protected static $SIMPLE_TYPES = array('boolean', 'int', 'float', 'string');
 
-  protected static $ALIAS = array('int' => 'integer', 'bool' => 'boolean');
+  protected static $ALIAS = array('integer' => 'int', 'bool' => 'boolean');
 
   /**
    * Enter description here...
