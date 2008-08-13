@@ -38,6 +38,16 @@ class ckWsdlMessage implements ckDOMSerializable
     return $this->parts;
   }
 
+  public function getHeaderParts()
+  {
+    return array_filter($this->getParts(), array($this, 'isHeaderPart'));
+  }
+
+  public function getBodyParts()
+  {
+    return array_filter($this->getParts(), array($this, 'isBodyPart'));
+  }
+
   public function addPart(ckWsdlPart $part)
   {
     $this->parts[] = $part;
@@ -67,5 +77,15 @@ class ckWsdlMessage implements ckDOMSerializable
     }
 
     return $node;
+  }
+
+  private function isHeaderPart($input)
+  {
+    return $input->getIsHeader();
+  }
+
+  private function isBodyPart($input)
+  {
+    return !$input->getIsHeader();
   }
 }

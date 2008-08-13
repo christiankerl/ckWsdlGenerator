@@ -65,7 +65,7 @@ abstract class ckXsdType implements ckDOMSerializable
    * Enter description here...
    *
    * @param string $key
-   * @param string $url
+   * @param ckXsdType $url
    *
    * @return ckXsdType
    */

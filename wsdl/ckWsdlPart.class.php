@@ -22,6 +22,7 @@ class ckWsdlPart implements ckDOMSerializable
 
   protected $name;
   protected $type;
+  protected $isHeader;
 
   public function getName()
   {
@@ -43,15 +44,26 @@ class ckWsdlPart implements ckDOMSerializable
     $this->type = $value;
   }
 
+  public function getIsHeader()
+  {
+    return $this->isHeader;
+  }
+
+  public function setIsHeader($value)
+  {
+    $this->isHeader = $value;
+  }
+
   public function getNodeName()
   {
     return self::ELEMENT_NAME;
   }
 
-  public function __construct($name = null, ckXsdType $type = null)
+  public function __construct($name = null, ckXsdType $type = null, $isHeader = false)
   {
     $this->setName($name);
     $this->setType($type);
+    $this->setIsHeader($isHeader);
   }
 
   public function serialize(DOMDocument $document)

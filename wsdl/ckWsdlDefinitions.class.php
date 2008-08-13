@@ -107,19 +107,24 @@ class ckWsdlDefinitions implements ckDOMSerializable
     $node->setAttribute($tns->getXmlns(), $tns->getUrl());
     $node->setAttribute($soapenc->getXmlns(), $soapenc->getUrl());
 
-    $types_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('types'));
+    $types = $this->getTypes();
 
-    $schema_node = $document->createElementNS($xsd->getUrl(), $xsd->qualify('schema'));
-    $schema_node->setAttribute('xmlns', $xsd->getUrl());
-    $schema_node->setAttribute('targetNamespace', $tns->getUrl());
-
-    foreach($this->getTypes() as $type)
+    if(count($types) > 0)
     {
-      $schema_node->appendChild($type->serialize($document));
-    }
+      $schema_node = $document->createElementNS($xsd->getUrl(), $xsd->qualify('schema'));
+      $schema_node->setAttribute('xmlns', $xsd->getUrl());
+      $schema_node->setAttribute('targetNamespace', $tns->getUrl());
 
-    $types_node->appendChild($schema_node);
-    $node->appendChild($types_node);
+      foreach($types as $type)
+      {
+        $schema_node->appendChild($type->serialize($document));
+      }
+
+      $types_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('types'));
+      $types_node->appendChild($schema_node);
+
+      $node->appendChild($types_node);
+    }
 
     foreach($this->getPortTypes() as $portType)
     {

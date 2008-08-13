@@ -33,9 +33,12 @@ class ckWsdlPortType implements ckDOMSerializable
     $this->name = $value;
   }
 
-  public function addOperation(ckWsdlOperation $operation)
+  public function addOperation(ckWsdlOperation $operation = null)
   {
-    $this->operations[] = $operation;
+    if(!is_null($operation))
+    {
+      $this->operations[] = $operation;
+    }
   }
 
   public function getOperations()

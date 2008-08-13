@@ -20,6 +20,7 @@ class ckWsdlGenerator
   protected $name;
   protected $namespace;
   protected $endpoint;
+  protected $checkEnablement = false;
   protected $methods = array();
 
   public function getName()
@@ -35,6 +36,16 @@ class ckWsdlGenerator
   public function getEndpoint()
   {
     return $this->endpoint;
+  }
+
+  public function getCheckEnablement()
+  {
+    return $this->checkEnablement;
+  }
+
+  public function setCheckEnablement($value)
+  {
+    $this->checkEnablement = $value;
   }
 
   public function __construct($name, $namespace, $endpoint)
@@ -56,7 +67,7 @@ class ckWsdlGenerator
 
     foreach($this->methods as $method)
     {
-      $portType->addOperation(ckWsdlOperation::create($method->getName(), $method));
+      $portType->addOperation(ckWsdlOperation::create($method->getName(), $method, $this->getCheckEnablement()));
     }
 
     $binding = new ckWsdlSoapBindingDecorator();

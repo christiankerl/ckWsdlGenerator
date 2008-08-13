@@ -28,7 +28,11 @@ class ckXsdComplexType extends ckXsdType
     foreach($reflectClass->getProperties() as $property)
     {
       $type = ckDocBlockParser::parseProperty($property->getDocComment());
-      $result->addElement(new ckXsdComplexTypeElement($property->getName(), ckXsdType::get($type['type'])));
+
+      if(!empty($type))
+      {
+        $result->addElement(new ckXsdComplexTypeElement($property->getName(), ckXsdType::get($type['type'])));
+      }
     }
 
     return $result;

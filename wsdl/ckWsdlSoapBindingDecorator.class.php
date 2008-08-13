@@ -50,6 +50,11 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
         $in_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('input'));
         $in_node->appendChild($this->getSoapBodyNode($document, $operation->getInput()));
 
+        foreach($operation->getInput()->getHeaderParts() as $header)
+        {
+          $in_node->appendChild($this->getSoapHeaderNode($document, $operation->getInput(), $header));
+        }
+
         $op_node->appendChild($in_node);
       }
 
@@ -67,26 +72,34 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
     return $node;
   }
 
-  private function getSoapBodyNode($document, $message)
+  private function getSoapBodyNode(DOMDocument $document, ckWsdlMessage $message)
   {
     $soap    = ckXsdNamespace::get('soap');
     $soapenc = ckXsdNamespace::get('soapenc');
     $tns     = ckXsdNamespace::get('tns');
 
     $body_node = $document->createElementNS($soap->getUrl(), $soap->qualify('body'));
-
-    $parts = array();
-
-    foreach($message->getParts() as $part)
-    {
-      $parts[] = $part->getName();
-    }
-
-    $body_node->setAttribute('parts', implode(' ', $parts));
+    $body_node->setAttribute('parts', implode(' ', $message->getBodyParts()));
     $body_node->setAttribute('use', 'encoded');
     $body_node->setAttribute('namespace', $tns->getUrl());
     $body_node->setAttribute('encodingStyle', $soapenc->getUrl());
 
     return $body_node;
+  }
+
+  private function getSoapHeaderNode(DOMDocument $document, ckWsdlMessage $message, ckWsdlPart $part)
+  {
+    $soap    = ckXsdNamespace::get('soap');
+    $soapenc = ckXsdNamespace::get('soapenc');
+    $tns     = ckXsdNamespace::get('tns');
+
+    $header_node = $document->createElementNS($soap->getUrl(), $soap->qualify('header'));
+    $header_node->setAttribute('message', $tns->qualify($message->getName()));
+    $header_node->setAttribute('part', $part->getName());
+    $header_node->setAttribute('use', 'encoded');
+    $header_node->setAttribute('namespace', $tns->getUrl());
+    $header_node->setAttribute('encodingStyle', $soapenc->getUrl());
+
+    return $header_node;
   }
 }

@@ -18,13 +18,19 @@
  */
 class ckWsdlOperation implements ckDOMSerializable
 {
-  public static function create($name, ReflectionMethod $method)
+  public static function create($name, ReflectionMethod $method, $checkEnablement = false)
   {
     $result = new ckWsdlOperation();
     $result->setName($name);
 
-    $params = ckDocBlockParser::parseParameters($method->getDocComment());
-    $return = ckDocBlockParser::parseReturn($method->getDocComment());
+    if($checkEnablement && !ckDocBlockParser::hasDocTag($method->getDocComment(), 'ws-enable'))
+    {
+      return null;
+    }
+
+    $params  = ckDocBlockParser::parseParameters($method->getDocComment());
+    $headers = ckDocBlockParser::parseHeader($method->getDocComment());
+    $return  = ckDocBlockParser::parseReturn($method->getDocComment());
 
     $result->input = new ckWsdlMessage($name.'Request');
 
@@ -35,7 +41,17 @@ class ckWsdlOperation implements ckDOMSerializable
       $result->input->addPart(new ckWsdlPart($param['name'], $type));
     }
 
-    if(!is_null($return))
+    foreach($headers as $header)
+    {
+      $type = ckXsdType::get($header['type']);
+      $type->setName($header['name']);
+      ckXsdType::set($header['name'], $type);
+      ckXsdType::set($header['type'], null);
+
+      $result->input->addPart(new ckWsdlPart($header['name'], $type, true));
+    }
+
+    if(!empty($return))
     {
       $type = ckXsdType::get($return['type']);
 
@@ -115,12 +131,13 @@ class ckWsdlOperation implements ckDOMSerializable
     $node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify($this->getNodeName()));
 
     $node->setAttribute('name', $this->getName());
-    $node->setAttribute('parameterOrder', implode(' ', $this->getInput()->getParts()));
 
     if(!is_null($this->getInput()))
     {
       $input_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('input'));
       $input_node->setAttribute('message', $tns->qualify($this->getInput()->getName()));
+
+      $node->setAttribute('parameterOrder', implode(' ', $this->getInput()->getBodyParts()));
       $node->appendChild($input_node);
     }
 

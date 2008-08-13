@@ -17,14 +17,20 @@
  */
 class ckDocBlockParser
 {
-  //                              *   @param   (    type_name    )    $(  var_name  )    ( desc )
-  const PARAM_PATTERN    = '|^\s*\*\s*@param\s+([0-9A-Za-z_\[\]]+)\s+\$([0-9A-Za-z_]+)\s*(.*)$|';
+  //                               *   @param   (    type_name    )    $(  var_name  )    ( desc )
+  const PARAM_PATTERN     = '|^\s*\*\s*@param\s+([0-9A-Za-z_\[\]]+)\s+\$([0-9A-Za-z_]+)\s*(.*)$|';
 
-  //                              *   @return   (    type_name    )   ( desc )
-  const RETURN_PATTERN   = '|^\s*\*\s*@return\s+([0-9A-Za-z_\[\]]+)\s*(.*)$|';
+  //                               *   @return   (    type_name    )   ( desc )
+  const RETURN_PATTERN    = '|^\s*\*\s*@return\s+([0-9A-Za-z_\[\]]+)\s*(.*)$|';
 
-  //                              *   @var   (    type_name    )
-  const PROPERTY_PATTERN = '|^\s*\*\s*@var\s+([0-9A-Za-z_\[\]]+)\s*$|';
+  //                               *   @var   (    type_name    )
+  const PROPERTY_PATTERN  = '|^\s*\*\s*@var\s+([0-9A-Za-z_\[\]]+)\s*$|';
+
+  //                               *   @ws-header      ( header_name ) :   (    type_name    )
+  const WSHEADER_PATTERN  = '/^\s*\*\s*@ws-header\s+(?:([0-9A-Za-z_]+)\:\s+([0-9A-Za-z_\[\]]+))\s*$/';
+
+  //                               *   @<>
+  const ANYDOCTAG_PATTERN = '|^\s*\*\s*@%s.*$|';
 
   const COUNT_RECURSIVE = 1;
   const LINE_DELIMITER = "\n";
@@ -36,7 +42,7 @@ class ckDocBlockParser
 
     if(count($tmp, self::COUNT_RECURSIVE) < 4)
     {
-      return null;
+      return $result;
     }
 
     foreach($tmp as $param)
@@ -51,10 +57,9 @@ class ckDocBlockParser
   {
     $tmp = self::parse($str, self::RETURN_PATTERN);
 
-
     if(count($tmp, self::COUNT_RECURSIVE) < 3)
     {
-      return null;
+      return array();
     }
 
     return array('type' => $tmp[0][0], 'desc' => $tmp[0][1]);
@@ -66,10 +71,33 @@ class ckDocBlockParser
 
     if(count($tmp, self::COUNT_RECURSIVE) < 2)
     {
-      return null;
+      return array();
     }
 
     return array('type' => $tmp[0][0]);
+  }
+
+  public static function parseHeader($str)
+  {
+    $result = array();
+    $tmp = self::parse($str, self::WSHEADER_PATTERN);
+
+    if(count($tmp, self::COUNT_RECURSIVE) < 3)
+    {
+      return $result;
+    }
+
+    foreach($tmp as $header)
+    {
+      $result[] = array('name' => $header[0], 'type' => $header[1]);
+    }
+
+    return $result;
+  }
+
+  public static function hasDocTag($str, $tag)
+  {
+    return count(self::parse($str, sprintf(self::ANYDOCTAG_PATTERN, $tag))) > 0;
   }
 
   private static function parse($str, $pattern)
