@@ -57,11 +57,11 @@ class ckWsdlGenerator
     $this->endpoint = $endpoint;
   }
 
-  public function addMethod(ReflectionMethod $method)
+  public function addMethod($name, ReflectionMethod $method)
   {
     if(!$this->getCheckEnablement() || ckDocBlockParser::hasDocTag($method->getDocComment(), self::ENABLEMENT_DOCTAG))
     {
-      $this->methods[] = $method;
+      $this->methods[$name] = $method;
 
       return true;
     }
@@ -76,9 +76,9 @@ class ckWsdlGenerator
     $portType = new ckWsdlPortType();
     $portType->setName($this->getName().'PortType');
 
-    foreach($this->methods as $method)
+    foreach($this->methods as $name => $method)
     {
-      $portType->addOperation(ckWsdlOperation::create($method->getName(), $method));
+      $portType->addOperation(ckWsdlOperation::create($name, $method));
     }
 
     $binding = new ckWsdlSoapBindingDecorator();
