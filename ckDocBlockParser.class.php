@@ -26,12 +26,15 @@ class ckDocBlockParser
   //                              *   @var   (    type_name    )
   const PROPERTY_PATTERN = '|^\s*\*\s*@var\s+([0-9A-Za-z_\[\]]+)\s*$|';
 
+  const COUNT_RECURSIVE = 1;
+  const LINE_DELIMITER = "\n";
+
   public static function parseParameters($str)
   {
     $result = array();
     $tmp = self::parse($str, self::PARAM_PATTERN);
 
-    if(count($tmp, 1) < 4)
+    if(count($tmp, self::COUNT_RECURSIVE) < 4)
     {
       return null;
     }
@@ -49,7 +52,7 @@ class ckDocBlockParser
     $tmp = self::parse($str, self::RETURN_PATTERN);
 
 
-    if(count($tmp, 1) < 3)
+    if(count($tmp, self::COUNT_RECURSIVE) < 3)
     {
       return null;
     }
@@ -61,7 +64,7 @@ class ckDocBlockParser
   {
     $tmp = self::parse($str, self::PROPERTY_PATTERN);
 
-    if(count($tmp, 1) < 2)
+    if(count($tmp, self::COUNT_RECURSIVE) < 2)
     {
       return null;
     }
@@ -72,7 +75,7 @@ class ckDocBlockParser
   private static function parse($str, $pattern)
   {
     $result = array();
-    $lines = explode("\n", $str);
+    $lines = explode(self::LINE_DELIMITER, $str);
 
     foreach($lines as $line)
     {
