@@ -45,6 +45,8 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
       $op_soap_node->setAttribute('style', 'rpc');
       $op_node->appendChild($op_soap_node);
 
+      $header_nodes = array();
+
       if(!is_null($operation->getInput()))
       {
         $in_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('input'));
@@ -52,7 +54,9 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
 
         foreach($operation->getInput()->getHeaderParts() as $header)
         {
-          $in_node->appendChild($this->getSoapHeaderNode($document, $operation->getInput(), $header));
+          $header_node = $this->getSoapHeaderNode($document, $operation->getInput(), $header);
+          $header_nodes[] = $header_node;
+          $in_node->appendChild($header_node);
         }
 
         $op_node->appendChild($in_node);
@@ -62,6 +66,11 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
       {
         $out_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('output'));
         $out_node->appendChild($this->getSoapBodyNode($document, $operation->getOutput()));
+
+        foreach($header_nodes as $header_node)
+        {
+          $out_node->appendChild($header_node);
+        }
 
         $op_node->appendChild($out_node);
       }
