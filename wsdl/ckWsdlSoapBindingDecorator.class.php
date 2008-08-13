@@ -43,11 +43,50 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
       $op_soap_node = $document->createElementNS($soap->getUrl(), $soap->qualify($operation->getNodeName()));
       $op_soap_node->setAttribute('soapAction', $tns->getUrl().$operation->getName());
       $op_soap_node->setAttribute('style', 'rpc');
-
       $op_node->appendChild($op_soap_node);
+
+      if(!is_null($operation->getInput()))
+      {
+        $in_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('input'));
+        $in_node->appendChild($this->getSoapBodyNode($document, $operation->getInput()));
+
+        $op_node->appendChild($in_node);
+      }
+
+      if(!is_null($operation->getOutput()))
+      {
+        $out_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('output'));
+        $out_node->appendChild($this->getSoapBodyNode($document, $operation->getOutput()));
+
+        $op_node->appendChild($out_node);
+      }
+
       $node->appendChild($op_node);
     }
 
     return $node;
+  }
+
+  private function getSoapBodyNode($document, $message)
+  {
+    $soap    = ckXsdNamespace::get('soap');
+    $soapenc = ckXsdNamespace::get('soapenc');
+    $tns     = ckXsdNamespace::get('tns');
+
+    $body_node = $document->createElementNS($soap->getUrl(), $soap->qualify('body'));
+
+    $parts = array();
+
+    foreach($message->getParts() as $part)
+    {
+      $parts[] = $part->getName();
+    }
+
+    $body_node->setAttribute('parts', implode(' ', $parts));
+    $body_node->setAttribute('use', 'encoded');
+    $body_node->setAttribute('namespace', $tns->getUrl());
+    $body_node->setAttribute('encodingStyle', $soapenc->getUrl());
+
+    return $body_node;
   }
 }

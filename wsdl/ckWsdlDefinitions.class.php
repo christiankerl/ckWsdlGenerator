@@ -20,20 +20,24 @@ class ckWsdlDefinitions implements ckDOMSerializable
 {
   const ELEMENT_NAME = 'definitions';
 
-  protected $types = array();
+  protected $name;
   protected $portTypes = array();
   protected $bindings = array();
-  protected $messages = array();
   protected $services = array();
 
-  public function addType(ckXsdType $value)
+  public function getName()
   {
-    $this->types[] = $value;
+    return $this->name;
+  }
+
+  public function setName($value)
+  {
+    $this->name = $value;
   }
 
   public function getTypes()
   {
-    return $this->types;
+    return array_filter(ckXsdType::getAll(), array($this, 'isComplexOrArrayType'));
   }
 
   public function addPortType(ckWsdlPortType $value)
@@ -56,14 +60,20 @@ class ckWsdlDefinitions implements ckDOMSerializable
     return $this->bindings;
   }
 
-  public function addMessage(ckWsdlMessage $value)
-  {
-    $this->messages[] = $value;
-  }
-
   public function getMessages()
   {
-    return $this->messages;
+    $result = array();
+
+    foreach($this->getPortTypes() as $portType)
+    {
+      foreach($portType->getOperations() as $operation)
+      {
+        $result[] = $operation->getInput();
+        $result[] = $operation->getOutput();
+      }
+    }
+
+    return $result;
   }
 
   public function addService(ckWsdlService $value)
@@ -83,11 +93,32 @@ class ckWsdlDefinitions implements ckDOMSerializable
 
   public function serialize(DOMDocument $document)
   {
-    $wsdl = ckXsdNamespace::get('wsdl');
+    $wsdl    = ckXsdNamespace::get('wsdl');
+    $xsd     = ckXsdNamespace::get('xsd');
+    $tns     = ckXsdNamespace::get('tns');
+    $soapenc = ckXsdNamespace::get('soapenc');
 
     $node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify($this->getNodeName()));
+    $node->setAttribute('xmlns', $wsdl->getUrl());
+    $node->setAttribute('name', $this->getName());
+    $node->setAttribute('targetNamespace', $tns->getUrl());
+
+    // kind of hack to register all namespaces
+    $node->setAttribute($tns->getXmlns(), $tns->getUrl());
+    $node->setAttribute($soapenc->getXmlns(), $soapenc->getUrl());
+
     $types_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('types'));
 
+    $schema_node = $document->createElementNS($xsd->getUrl(), $xsd->qualify('schema'));
+    $schema_node->setAttribute('xmlns', $xsd->getUrl());
+    $schema_node->setAttribute('targetNamespace', $tns->getUrl());
+
+    foreach($this->getTypes() as $type)
+    {
+      $schema_node->appendChild($type->serialize($document));
+    }
+
+    $types_node->appendChild($schema_node);
     $node->appendChild($types_node);
 
     foreach($this->getPortTypes() as $portType)
@@ -111,5 +142,10 @@ class ckWsdlDefinitions implements ckDOMSerializable
     }
 
     return $node;
+  }
+
+  private function isComplexOrArrayType($input)
+  {
+    return $input instanceof ckXsdComplexType || $input instanceof ckXsdArrayType;
   }
 }

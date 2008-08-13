@@ -19,25 +19,25 @@
 class ckWsdlMessage implements ckDOMSerializable
 {
   const ELEMENT_NAME = 'message';
-  
+
   protected $name;
   protected $parts = array();
-  
+
   public function getName()
   {
     return $this->name;
   }
-  
+
   public function setName($value)
   {
     $this->name = $value;
   }
-  
+
   public function getParts()
   {
     return $this->parts;
   }
-  
+
   public function addPart(ckWsdlPart $part)
   {
     $this->parts[] = $part;
@@ -47,25 +47,25 @@ class ckWsdlMessage implements ckDOMSerializable
   {
     return self::ELEMENT_NAME;
   }
-  
+
   public function __construct($name)
   {
     $this->setName($name);
   }
-  
+
   public function serialize(DOMDocument $document)
   {
     $wsdl = ckXsdNamespace::get('wsdl');
-    
+
     $node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify($this->getNodeName()));
-    
+
     $node->setAttribute('name', $this->getName());
-    
+
     foreach($this->getParts() as $part)
     {
       $node->appendChild($part->serialize($document));
     }
-    
+
     return $node;
   }
 }
