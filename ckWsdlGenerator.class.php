@@ -17,6 +17,8 @@
  */
 class ckWsdlGenerator
 {
+  const ENABLEMENT_DOCTAG = 'ws-enable';
+
   protected $name;
   protected $namespace;
   protected $endpoint;
@@ -57,7 +59,16 @@ class ckWsdlGenerator
 
   public function addMethod(ReflectionMethod $method)
   {
-    $this->methods[] = $method;
+    if(!$this->getCheckEnablement() || ckDocBlockParser::hasDocTag($method->getDocComment(), self::ENABLEMENT_DOCTAG))
+    {
+      $this->methods[] = $method;
+
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 
   public function save($file = null)
@@ -67,7 +78,7 @@ class ckWsdlGenerator
 
     foreach($this->methods as $method)
     {
-      $portType->addOperation(ckWsdlOperation::create($method->getName(), $method, $this->getCheckEnablement()));
+      $portType->addOperation(ckWsdlOperation::create($method->getName(), $method));
     }
 
     $binding = new ckWsdlSoapBindingDecorator();

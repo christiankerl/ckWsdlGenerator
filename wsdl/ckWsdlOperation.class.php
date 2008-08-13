@@ -18,15 +18,10 @@
  */
 class ckWsdlOperation implements ckDOMSerializable
 {
-  public static function create($name, ReflectionMethod $method, $checkEnablement = false)
+  public static function create($name, ReflectionMethod $method)
   {
     $result = new ckWsdlOperation();
     $result->setName($name);
-
-    if($checkEnablement && !ckDocBlockParser::hasDocTag($method->getDocComment(), 'ws-enable'))
-    {
-      return null;
-    }
 
     $params  = ckDocBlockParser::parseParameters($method->getDocComment());
     $headers = ckDocBlockParser::parseHeader($method->getDocComment());
