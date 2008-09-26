@@ -29,6 +29,9 @@ class ckDocBlockParser
   //                               *   @ws-header      ( header_name ) :   (    type_name    )
   const WSHEADER_PATTERN  = '/^\s*\*\s*@ws-header\s+(?:([0-9A-Za-z_]+)\:\s+([0-9A-Za-z_\[\]]+))\s*$/';
 
+  //                               *   @ws-method      ( method_name )
+  const WSMETHOD_PATTERN  = '/^\s*\*\s*@ws-header\s+(?:([0-9A-Za-z_]+)\s*$|';
+
   //                               *   @<>
   const ANYDOCTAG_PATTERN = '|^\s*\*\s*@%s.*$|';
 
@@ -93,6 +96,18 @@ class ckDocBlockParser
     }
 
     return $result;
+  }
+
+  public static function parseMethod($str)
+  {
+    $tmp = self::parse($str, self::WSMETHOD_PATTERN);
+
+    if(count($tmp, self::COUNT_RECURSIVE) < 2)
+    {
+      return array();
+    }
+
+    return array('name' => $tmp[0][0]);
   }
 
   public static function hasDocTag($str, $tag)
