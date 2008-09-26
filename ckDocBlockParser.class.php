@@ -27,10 +27,10 @@ class ckDocBlockParser
   const PROPERTY_PATTERN  = '|^\s*\*\s*@var\s+([0-9A-Za-z_\[\]]+)\s*$|';
 
   //                               *   @ws-header      ( header_name ) :   (    type_name    )
-  const WSHEADER_PATTERN  = '/^\s*\*\s*@ws-header\s+(?:([0-9A-Za-z_]+)\:\s+([0-9A-Za-z_\[\]]+))\s*$/';
+  const WSHEADER_PATTERN  = '|^\s*\*\s*@ws-header\s+(?:([0-9A-Za-z_]+)\:\s+([0-9A-Za-z_\[\]]+))\s*$|';
 
   //                               *   @ws-method      ( method_name )
-  const WSMETHOD_PATTERN  = '/^\s*\*\s*@ws-header\s+(?:([0-9A-Za-z_]+)\s*$|';
+  const WSMETHOD_PATTERN  = '|^\s*\*\s*@ws-method\s+([0-9A-Za-z_]+)\s*$|';
 
   //                               *   @<>
   const ANYDOCTAG_PATTERN = '|^\s*\*\s*@%s.*$|';
