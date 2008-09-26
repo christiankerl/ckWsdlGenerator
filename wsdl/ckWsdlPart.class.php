@@ -73,7 +73,17 @@ class ckWsdlPart implements ckDOMSerializable
     $node = $document->createElementNS($wsdl->getUrl(),$wsdl->qualify($this->getNodeName()));
 
     $node->setAttribute('name', $this->getName());
-    $node->setAttribute('type', $this->getType()->getQualifiedName());
+
+    $attr   = 'type';
+    $suffix = '';
+
+    if($this->getType() instanceof ckXsdComplexType)
+    {
+      $attr = 'element';
+      $suffix = ckXsdComplexType::ELEMENT_SUFFIX;
+    }
+
+    $node->setAttribute($attr, $this->getType()->getQualifiedName().$suffix);
 
     return $node;
   }

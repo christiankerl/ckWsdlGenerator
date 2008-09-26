@@ -20,6 +20,8 @@ class ckXsdComplexType extends ckXsdType
 {
   const ELEMENT_NAME = 'complexType';
 
+  const ELEMENT_SUFFIX = 'Element';
+
   public static function create($name)
   {
     $reflectClass= new ReflectionClass($name);
@@ -86,6 +88,12 @@ class ckXsdComplexType extends ckXsdType
 
     $node->appendChild($sequence);
 
-    return $node;
+    $element = new ckXsdComplexTypeElement($this->getName().self::ELEMENT_SUFFIX, $this);
+
+    $fragment = $document->createDocumentFragment();
+    $fragment->appendChild($node);
+    $fragment->appendChild($element->serialize($document));
+
+    return $fragment;
   }
 }
