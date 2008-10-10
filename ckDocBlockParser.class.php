@@ -23,8 +23,8 @@ class ckDocBlockParser
   //                               *   @return   (    type_name    )   ( desc )
   const RETURN_PATTERN    = '|^\s*\*\s*@return\s+([0-9A-Za-z_\[\]]+)\s*(.*)$|';
 
-  //                               *   @var   (    type_name    )
-  const PROPERTY_PATTERN  = '|^\s*\*\s*@var\s+([0-9A-Za-z_\[\]]+)\s*$|';
+  //                               *   @var   (    type_name    )   ( desc )
+  const PROPERTY_PATTERN  = '|^\s*\*\s*@var\s+([0-9A-Za-z_\[\]]+)\s*(.*)$|';
 
   //                               *   @ws-header      ( header_name ) :   (    type_name    )
   const WSHEADER_PATTERN  = '|^\s*\*\s*@ws-header\s+(?:([0-9A-Za-z_]+)\:\s+([0-9A-Za-z_\[\]]+))\s*$|';
@@ -72,12 +72,12 @@ class ckDocBlockParser
   {
     $tmp = self::parse($str, self::PROPERTY_PATTERN);
 
-    if(count($tmp, self::COUNT_RECURSIVE) < 2)
+    if(count($tmp, self::COUNT_RECURSIVE) < 3)
     {
       return array();
     }
 
-    return array('type' => $tmp[0][0]);
+    return array('type' => $tmp[0][0], 'desc' => $tmp[0][1]);
   }
 
   public static function parseHeader($str)
