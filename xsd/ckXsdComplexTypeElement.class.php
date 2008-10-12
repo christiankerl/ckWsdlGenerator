@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the ckWebServicePlugin
+ * This file is part of the ckWsdlGenerator
  *
  * @package   ckWsdlGenerator
  * @author    Christian Kerl <christian-kerl@web.de>
@@ -10,7 +10,7 @@
  */
 
 /**
- * Enter description here...
+ * ckXsdComplexTypeElement represents a xsd element.
  *
  * @package    ckWsdlGenerator
  * @subpackage xsd
@@ -18,26 +18,29 @@
  */
 class ckXsdComplexTypeElement implements ckDOMSerializable
 {
+  /**
+   * The name of the root node of the xml representation.
+   */
   const ELEMENT_NAME = 'element';
 
   /**
-   * Enter description here...
+   * The name of the element.
    *
    * @var string
    */
   protected $name;
 
   /**
-   * Enter description here...
+   * The type of the element.
    *
-   * @var ckXsdNamespace
+   * @var ckXsdType
    */
   protected $type;
 
   /**
-   * Enter description here...
+   * Gets the name of the element.
    *
-   * @return string
+   * @return string The name of the element
    */
   public function getName()
   {
@@ -45,9 +48,9 @@ class ckXsdComplexTypeElement implements ckDOMSerializable
   }
 
   /**
-   * Enter description here...
+   * Sets the name of the element.
    *
-   * @param string $value
+   * @param string $value The name of the element
    */
   public function setName($value)
   {
@@ -55,9 +58,9 @@ class ckXsdComplexTypeElement implements ckDOMSerializable
   }
 
   /**
-   * Enter description here...
+   * Gets the type of the element.
    *
-   * @return ckXsdType
+   * @return ckXsdType The type of the element
    */
   public function getType()
   {
@@ -65,26 +68,38 @@ class ckXsdComplexTypeElement implements ckDOMSerializable
   }
 
   /**
-   * Enter description here...
+   * Sets the type of the element.
    *
-   * @param ckXsdType $value
+   * @param ckXsdType $value The type of the element
    */
   public function setType(ckXsdType $value)
   {
     $this->type = $value;
   }
 
+  /**
+   * @see ckDOMSerializable::getNodeName()
+   */
   public function getNodeName()
   {
     return self::ELEMENT_NAME;
   }
 
+  /**
+   * Constructor initializing the element with a given name and a given type.
+   *
+   * @param string    $name The name of the element
+   * @param ckXsdType $type The type of the element
+   */
   public function __construct($name, ckXsdType $type)
   {
     $this->setName($name);
     $this->setType($type);
   }
 
+  /**
+   * @see ckDOMSerializable::serialize()
+   */
   public function serialize(DOMDocument $document)
   {
     $xsd = ckXsdNamespace::get('xsd');

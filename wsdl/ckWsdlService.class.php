@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the ckWebServicePlugin
+ * This file is part of the ckWsdlGenerator
  *
  * @package   ckWsdlGenerator
  * @author    Christian Kerl <christian-kerl@web.de>
@@ -10,7 +10,7 @@
  */
 
 /**
- * Enter description here...
+ * ckWsdlService represents a wsdl service.
  *
  * @package    ckWsdlGenerator
  * @subpackage wsdl
@@ -18,25 +18,49 @@
  */
 class ckWsdlService implements ckDOMSerializable
 {
+  /**
+   * The name of the root node of the xml representation.
+   */
   const ELEMENT_NAME = 'service';
 
+  /**
+   * The name of the service.
+   *
+   * @var string
+   */
   protected $name;
+
+  /**
+   * An array containing all ports of the service.
+   *
+   * @var array
+   */
   protected $ports = array();
 
+  /**
+   * Gets the name of the service.
+   *
+   * @return string The name of the service
+   */
   public function getName()
   {
     return $this->name;
   }
 
+  /**
+   * Sets the name of the service.
+   *
+   * @param string $value The name of the service
+   */
   public function setName($value)
   {
     $this->name = $value;
   }
 
   /**
-   * Enter description here...
+   * Gets an array containing all ports of the service.
    *
-   * @return ckWsdlPortDecorator
+   * @return ckWsdlPortDecorator An array containing all ports of the service
    */
   public function getPorts()
   {
@@ -44,20 +68,26 @@ class ckWsdlService implements ckDOMSerializable
   }
 
   /**
-   * Enter description here...
+   * Adds a port to the service.
    *
-   * @param ckWsdlPortDecorator $value
+   * @param ckWsdlPortDecorator $value A port to add
    */
   public function addPort(ckWsdlPortDecorator $value)
   {
     $this->port[] = $value;
   }
 
+  /**
+   * @see ckDOMSerializable::getNodeName()
+   */
   public function getNodeName()
   {
     return self::ELEMENT_NAME;
   }
 
+  /**
+   * @see ckDOMSerializable::serialize()
+   */
   public function serialize(DOMDocument $document)
   {
     $wsdl = ckXsdNamespace::get('wsdl');

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the ckWebServicePlugin
+ * This file is part of the ckWsdlGenerator
  *
  * @package   ckWsdlGenerator
  * @author    Christian Kerl <christian-kerl@web.de>
@@ -10,7 +10,7 @@
  */
 
 /**
- * Enter description here...
+ * ckXsdComplexType represents a complex xsd type.
  *
  * @package    ckWsdlGenerator
  * @subpackage xsd
@@ -18,10 +18,23 @@
  */
 class ckXsdComplexType extends ckXsdType
 {
+  /**
+   * The name of the root node of the xml representation.
+   */
   const ELEMENT_NAME = 'complexType';
 
+  /**
+   * The suffix appended to the name of the type to get the name of the corresponding xsd element for the type.
+   */
   const ELEMENT_SUFFIX = 'Element';
 
+  /**
+   * Creates a new complex type object for the given php class.
+   *
+   * @param string $name A name of a php class
+   *
+   * @return ckXsdComplexType The complex type object
+   */
   public static function create($name)
   {
     $reflectClass= new ReflectionClass($name);
@@ -40,12 +53,17 @@ class ckXsdComplexType extends ckXsdType
     return $result;
   }
 
+  /**
+   * An array of xsd elements, which represent the properties of the complex type.
+   *
+   * @var array
+   */
   protected $elements = array();
 
   /**
-   * Enter description here...
+   * Adds a xsd element.
    *
-   * @param ckXsdComplexTypeElement $element
+   * @param ckXsdComplexTypeElement $element An element to add
    */
   public function addElement(ckXsdComplexTypeElement $element)
   {
@@ -53,25 +71,37 @@ class ckXsdComplexType extends ckXsdType
   }
 
   /**
-   * Enter description here...
+   * Gets all elements of the complex xsd type.
    *
-   * @return array
+   * @return array An array containing all elements
    */
   public function getElements()
   {
     return $this->elements;
   }
 
+  /**
+   * @see ckDOMSerializable::getNodeName()
+   */
   public function getNodeName()
   {
     return self::ELEMENT_NAME;
   }
 
+  /**
+   * Protected constructor initializing the complex xsd type with a given name and a given namespace.
+   *
+   * @param string         $name      The name of the complex type
+   * @param ckXsdNamespace $namespace The namespace of the complex type
+   */
   protected function __construct($name = null, ckXsdNamespace $namespace = null)
   {
     parent::__construct($name, $namespace);
   }
 
+  /**
+   * @see ckDOMSerializable::serialize()
+   */
   public function serialize(DOMDocument $document)
   {
     $xsd = ckXsdNamespace::get('xsd');

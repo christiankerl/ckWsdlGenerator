@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the ckWebServicePlugin
+ * This file is part of the ckWsdlGenerator
  *
  * @package   ckWsdlGenerator
  * @author    Christian Kerl <christian-kerl@web.de>
@@ -18,16 +18,40 @@
  */
 abstract class ckWsdlBindingDecorator implements ckDOMSerializable
 {
+  /**
+   * The name of the root node of the xml representation.
+   */
   const ELEMENT_NAME = 'binding';
 
+  /**
+   * The name of the binding.
+   *
+   * @var string
+   */
   protected $name;
+
+  /**
+   * Enter description here...
+   *
+   * @var ckWsdlPortType
+   */
   protected $portType = null;
 
+  /**
+   * Gets the name of the binding.
+   *
+   * @return string The name of the binding
+   */
   public function getName()
   {
     return $this->name;
   }
 
+  /**
+   * Sets the name of the binding
+   *
+   * @param string $value The name of the binding
+   */
   public function setName($value)
   {
     $this->name = $value;
@@ -53,10 +77,11 @@ abstract class ckWsdlBindingDecorator implements ckDOMSerializable
     $this->portType = $value;
   }
 
+  /**
+   * @see ckDOMSerializable::getNodeName()
+   */
   public function getNodeName()
   {
     return self::ELEMENT_NAME;
   }
-
-//  public abstract function serialize(DOMDocument $document);
 }

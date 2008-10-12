@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the ckWebServicePlugin
+ * This file is part of the ckWsdlGenerator
  *
  * @package   ckWsdlGenerator
  * @author    Christian Kerl <christian-kerl@web.de>
@@ -10,7 +10,7 @@
  */
 
 /**
- * Enter description here...
+ * ckWsdlDefinitions represents a wsdl definition.
  *
  * @package    ckWsdlGenerator
  * @subpackage wsdl
@@ -18,6 +18,9 @@
  */
 class ckWsdlDefinitions implements ckDOMSerializable
 {
+  /**
+   * The name of the root node of the xml representation.
+   */
   const ELEMENT_NAME = 'definitions';
 
   protected $name;
@@ -86,11 +89,17 @@ class ckWsdlDefinitions implements ckDOMSerializable
     return $this->services;
   }
 
+  /**
+   * @see ckDOMSerializable::getNodeName()
+   */
   public function getNodeName()
   {
     return self::ELEMENT_NAME;
   }
 
+  /**
+   * @see ckDOMSerializable::serialize()
+   */
   public function serialize(DOMDocument $document)
   {
     $wsdl    = ckXsdNamespace::get('wsdl');

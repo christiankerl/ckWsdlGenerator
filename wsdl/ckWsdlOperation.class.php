@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the ckWebServicePlugin
+ * This file is part of the ckWsdlGenerator
  *
  * @package   ckWsdlGenerator
  * @author    Christian Kerl <christian-kerl@web.de>
@@ -10,7 +10,7 @@
  */
 
 /**
- * Enter description here...
+ * ckWsdlOperation represents a wsdl operation.
  *
  * @package    ckWsdlGenerator
  * @subpackage wsdl
@@ -57,6 +57,9 @@ class ckWsdlOperation implements ckDOMSerializable
     return $result;
   }
 
+  /**
+   * The name of the root node of the xml representation.
+   */
   const ELEMENT_NAME = 'operation';
 
   protected $name;
@@ -108,16 +111,24 @@ class ckWsdlOperation implements ckDOMSerializable
     $this->output = $value;
   }
 
+  /**
+   * @see ckDOMSerializable::getNodeName()
+   */
   public function getNodeName()
   {
     return self::ELEMENT_NAME;
   }
 
+  /**
+   * Protected default constructor.
+   */
   protected function __construct()
   {
-
   }
 
+  /**
+   * @see ckDOMSerializable::serialize()
+   */
   public function serialize(DOMDocument $document)
   {
     $wsdl = ckXsdNamespace::get('wsdl');
@@ -142,7 +153,6 @@ class ckWsdlOperation implements ckDOMSerializable
       $output_node->setAttribute('message', $tns->qualify($this->getOutput()->getName()));
       $node->appendChild($output_node);
     }
-
 
     return $node;
   }

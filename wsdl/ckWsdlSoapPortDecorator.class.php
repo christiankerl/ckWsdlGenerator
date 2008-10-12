@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the ckWebServicePlugin
+ * This file is part of the ckWsdlGenerator
  *
  * @package   ckWsdlGenerator
  * @author    Christian Kerl <christian-kerl@web.de>
@@ -10,7 +10,7 @@
  */
 
 /**
- * Enter description here...
+ * ckWsdlSoapPortDecorator provides methods to decorate a wsdl port definition with data specific for the soap protocol.
  *
  * @package    ckWsdlGenerator
  * @subpackage wsdl
@@ -18,6 +18,9 @@
  */
 class ckWsdlSoapPortDecorator extends ckWsdlPortDecorator
 {
+  /**
+   * @see ckDOMSerializable::serialize()
+   */
   public function serialize(DOMDocument $document)
   {
     $wsdl = ckXsdNamespace::get('wsdl');

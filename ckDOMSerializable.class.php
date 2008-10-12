@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the ckWebServicePlugin
+ * This file is part of the ckWsdlGenerator
  *
  * @package   ckWsdlGenerator
  * @author    Christian Kerl <christian-kerl@web.de>
@@ -10,13 +10,26 @@
  */
 
 /**
- * Enter description here...
+ * ckDOMSerializable provides methods to make an object serializable to xml.
  *
  * @package    ckWsdlGenerator
  * @author     Christian Kerl <christian-kerl@web.de>
  */
 interface ckDOMSerializable
 {
+  /**
+   * Gets the name of the root node of the objects xml representation.
+   *
+   * @return string The node name
+   */
   public function getNodeName();
+
+  /**
+   * Serializes the object in the context of a given xml document.
+   *
+   * @param DOMDocument $document A xml document used to create node objects
+   *
+   * @return DOMNode The xml representation of the object
+   */
   public function serialize(DOMDocument $document);
 }

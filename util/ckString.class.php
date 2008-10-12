@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the ckWebServicePlugin
+ * This file is part of the ckWsdlGenerator
  *
  * @package   ckWebServicePlugin
  * @author    Christian Kerl <christian-kerl@web.de>
@@ -34,7 +34,7 @@ class ckString
 
     return $str;
   }
-  
+
   /**
    * Makes a string's first character uppercase.
    *
@@ -46,7 +46,7 @@ class ckString
   {
     return ucfirst($str);
   }
-  
+
   /**
    * Checks if a string starts with a given string.
    *
@@ -57,12 +57,12 @@ class ckString
    */
   public static function startsWith($str, $substr)
   {
-    if(is_string($str) && is_string($substr))
+    if(is_string($str) && is_string($substr) && strlen($str) >= strlen($substr))
     {
       return $substr == substr($str, 0, strlen($substr));
     }
   }
-  
+
   /**
    * Checks if a string ends with a given string.
    *
@@ -73,7 +73,7 @@ class ckString
    */
   public static function endsWith($str, $substr)
   {
-    if(is_string($str) && is_string($substr))
+    if(is_string($str) && is_string($substr) && strlen($str) >= strlen($substr))
     {
       return $substr == substr($str, strlen($str) - strlen($substr));
     }
