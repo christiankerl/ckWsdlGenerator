@@ -23,46 +23,109 @@ class ckWsdlDefinitions implements ckDOMSerializable
    */
   const ELEMENT_NAME = 'definitions';
 
+  /**
+   * The name of the webservice definition.
+   *
+   * @var string
+   */
   protected $name;
+
+  /**
+   * An array containing all port types of the definition.
+   *
+   * @var array
+   */
   protected $portTypes = array();
+
+  /**
+   * An array containing all bindings of the definition.
+   *
+   * @var array
+   */
   protected $bindings = array();
+
+  /**
+   * An array containing all services of the definition.
+   *
+   * @var array
+   */
   protected $services = array();
 
+  /**
+   * Gets the name of the webservice definition.
+   *
+   * @return string The name of the webservice definition
+   */
   public function getName()
   {
     return $this->name;
   }
 
+  /**
+   * Sets the name of the webservice definition.
+   *
+   * @param string $value The name of the webservice definition
+   */
   public function setName($value)
   {
     $this->name = $value;
   }
 
+  /**
+   * Gets all complex and array types.
+   *
+   * @return array An array containing all complex and array types
+   */
   public function getTypes()
   {
     return ckXsdType::getComplexAndArrayTypes();
   }
 
+  /**
+   * Adds a port type to the definition.
+   *
+   * @param ckWsdlPortType $value A port type
+   */
   public function addPortType(ckWsdlPortType $value)
   {
     $this->portTypes[] = $value;
   }
 
+  /**
+   * Gets all port types of the definition.
+   *
+   * @return array An array containing all port types
+   */
   public function getPortTypes()
   {
     return $this->portTypes;
   }
 
+  /**
+   * Adds a binding to the definition.
+   *
+   * @param ckWsdlBindingDecorator $value A binding
+   */
   public function addBinding(ckWsdlBindingDecorator $value)
   {
     $this->bindings[] = $value;
   }
 
+  /**
+   * Gets all bindings of the definition.
+   *
+   * @return array An array containing all bindings
+   */
   public function getBindings()
   {
     return $this->bindings;
   }
 
+  /**
+   * Gets all messages of the operations of the different port types.
+   *
+   * @return array An array containing all messages
+   */
   public function getMessages()
   {
     $result = array();
@@ -79,11 +142,21 @@ class ckWsdlDefinitions implements ckDOMSerializable
     return $result;
   }
 
+  /**
+   * Adds a service to the definition.
+   *
+   * @param ckWsdlService $value A service
+   */
   public function addService(ckWsdlService $value)
   {
     $this->services[] = $value;
   }
 
+  /**
+   * Gets all services of the definition.
+   *
+   * @return array An array containing all services
+   */
   public function getServices()
   {
     return $this->services;

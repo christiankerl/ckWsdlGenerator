@@ -18,6 +18,15 @@
  */
 class ckWsdlOperation implements ckDOMSerializable
 {
+  /**
+   * Creates a new operation with a given name from a given php method.
+   *
+   * @param string           $name   The name of the operation
+   * @param ReflectionMethod $method A php method
+   *
+   * @return ckWsdlOperation An operation, which's input corresponds to the parameters and which's output
+   *                         corresponds to the return value of the given php method.
+   */
   public static function create($name, ReflectionMethod $method)
   {
     $result = new ckWsdlOperation();
@@ -62,39 +71,71 @@ class ckWsdlOperation implements ckDOMSerializable
    */
   const ELEMENT_NAME = 'operation';
 
+  /**
+   * The name of the operation.
+   *
+   * @var string
+   */
   protected $name;
+
+  /**
+   * The input of the operation.
+   *
+   * @var ckWsdlMessage
+   */
   protected $input;
+
+  /**
+   * The output of the operation.
+   *
+   * @var ckWsdlMessage
+   */
   protected $output;
 
+  /**
+   * Gets the name of the operation.
+   *
+   * @return string The name of the operation
+   */
   public function getName()
   {
     return $this->name;
   }
 
+  /**
+   * Sets the name of the operation.
+   *
+   * @param string $value The name of the operation
+   */
   public function setName($value)
   {
     $this->name = $value;
   }
 
   /**
-   * Enter description here...
+   * Gets the input.
    *
-   * @return ckWsdlMessage
+   * @return ckWsdlMessage The input
    */
   public function getInput()
   {
     return $this->input;
   }
 
+  /**
+   * Sets the input.
+   *
+   * @param ckWsdlMessage $value The input
+   */
   public function setInput(ckWsdlMessage $value)
   {
     $this->input = $value;
   }
 
   /**
-   * Enter description here...
+   * Gets the output.
    *
-   * @return ckWsdlMessage
+   * @return ckWsdlMessage The output
    */
   public function getOutput()
   {
@@ -102,9 +143,9 @@ class ckWsdlOperation implements ckDOMSerializable
   }
 
   /**
-   * Enter description here...
+   * Sets the output.
    *
-   * @param ckWsdlMessage $value
+   * @param ckWsdlMessage $value The input
    */
   public function setOutput(ckWsdlMessage $value)
   {

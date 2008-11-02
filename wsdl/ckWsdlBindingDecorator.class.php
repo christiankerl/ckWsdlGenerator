@@ -10,7 +10,8 @@
  */
 
 /**
- * Enter description here...
+ * ckWsdlBindingDecorator provides a base class with common methods for all specific binding decorators,
+ * which add transfer protocol specific data to wsdl bindings.
  *
  * @package    ckWsdlGenerator
  * @subpackage wsdl
@@ -31,7 +32,7 @@ abstract class ckWsdlBindingDecorator implements ckDOMSerializable
   protected $name;
 
   /**
-   * Enter description here...
+   * The port type corresponding to the binding.
    *
    * @var ckWsdlPortType
    */
@@ -58,9 +59,9 @@ abstract class ckWsdlBindingDecorator implements ckDOMSerializable
   }
 
   /**
-   * Enter description here...
+   * Gets the port type corresponding to the binding.
    *
-   * @return ckWsdlPortType
+   * @return ckWsdlPortType The port type corresponding to the binding
    */
   public function getPortType()
   {
@@ -68,9 +69,9 @@ abstract class ckWsdlBindingDecorator implements ckDOMSerializable
   }
 
   /**
-   * Enter description here...
+   * Sets the port type corresponding to the binding.
    *
-   * @param ckWsdlPortType $value
+   * @param ckWsdlPortType $value The port type corresponding to the binding
    */
   public function setPortType(ckWsdlPortType $value)
   {

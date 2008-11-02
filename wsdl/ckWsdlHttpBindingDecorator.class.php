@@ -10,7 +10,7 @@
  */
 
 /**
- * Enter description here...
+ * ckWsdlHttpBindingDecorator provides methods to decorate a wsdl binding definition with data specific for the http protocol.
  *
  * @package    ckWsdlGenerator
  * @subpackage wsdl

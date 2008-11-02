@@ -10,7 +10,7 @@
  */
 
 /**
- * Enter description here...
+ * ckWsdlSoapBindingDecorator provides methods to decorate a wsdl binding definition with data specific for the soap protocol.
  *
  * @package    ckWsdlGenerator
  * @subpackage wsdl
@@ -84,6 +84,14 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
     return $node;
   }
 
+  /**
+   * Gets a soap:body element for a given wsdl message.
+   *
+   * @param DOMDocument   $document A xml document used to create node objects
+   * @param ckWsdlMessage $message  A wsdl message
+   *
+   * @return DOMElement A soap:body element
+   */
   private function getSoapBodyNode(DOMDocument $document, ckWsdlMessage $message)
   {
     $soap    = ckXsdNamespace::get('soap');
@@ -99,6 +107,15 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
     return $body_node;
   }
 
+  /**
+   * Gets a soap:header element for a given wsdl message part of a given wsdl message.
+   *
+   * @param DOMDocument   $document A xml document used to create node objects
+   * @param ckWsdlMessage $message  A wsdl message
+   * @param ckWsdlPart    $part     A wsdl part
+   *
+   * @return DOMElement A soap:header element
+   */
   private function getSoapHeaderNode(DOMDocument $document, ckWsdlMessage $message, ckWsdlPart $part)
   {
     $soap    = ckXsdNamespace::get('soap');
