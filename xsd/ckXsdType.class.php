@@ -84,7 +84,7 @@ abstract class ckXsdType implements ckDOMSerializable
    *
    * @return ckXsdType The given xsd type
    */
-  public static function set($name, ckXsdType $type)
+  public static function set($name, ckXsdType $type = null)
   {
     self::$typeRegistry[$name] = $type;
 
