@@ -100,7 +100,7 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
 
     $body_node = $document->createElementNS($soap->getUrl(), $soap->qualify('body'));
     $body_node->setAttribute('parts', implode(' ', $message->getBodyParts()));
-    $body_node->setAttribute('use', 'encoded');
+    $body_node->setAttribute('use', 'literal');
     $body_node->setAttribute('namespace', $tns->getUrl());
     $body_node->setAttribute('encodingStyle', $soapenc->getUrl());
 
@@ -125,7 +125,7 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
     $header_node = $document->createElementNS($soap->getUrl(), $soap->qualify('header'));
     $header_node->setAttribute('message', $tns->qualify($message->getName()));
     $header_node->setAttribute('part', $part->getName());
-    $header_node->setAttribute('use', 'encoded');
+    $header_node->setAttribute('use', 'literal');
     $header_node->setAttribute('namespace', $tns->getUrl());
     $header_node->setAttribute('encodingStyle', $soapenc->getUrl());
 
