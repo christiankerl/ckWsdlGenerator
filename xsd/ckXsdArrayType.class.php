@@ -95,7 +95,7 @@ class ckXsdArrayType extends ckXsdComplexType
    */
   public function getElements()
   {
-    return array(new ckXsdComplexTypeElement('item', $this->getElementType(), '0', 'unbound'));
+    return array(new ckXsdComplexTypeElement('item', $this->getElementType(), '0', 'unbounded'));
   }
 
   /**
