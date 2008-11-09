@@ -16,13 +16,8 @@
  * @subpackage xsd
  * @author     Christian Kerl <christian-kerl@web.de>
  */
-class ckXsdArrayType extends ckXsdType
+class ckXsdArrayType extends ckXsdComplexType
 {
-  /**
-   * The name of the root node of the xml representation.
-   */
-  const ELEMENT_NAME = 'complexType';
-
   /**
    * The suffix of a type name, which identifies it as array type.
    */
@@ -31,7 +26,7 @@ class ckXsdArrayType extends ckXsdType
   /**
    * The prefix every array type name starts with.
    */
-  const NAME_PREFIX = 'ArrayOf';
+  const NAME_SUFFIX = 'Array';
 
   /**
    * Creates a new array type object, if the given type name is one of an array type.
@@ -49,7 +44,7 @@ class ckXsdArrayType extends ckXsdType
 
       if(!is_null($elementType))
       {
-        return new ckXsdArrayType(self::NAME_PREFIX.ckString::ucfirst($elementTypeName), ckXsdNamespace::get('tns'), $elementType);
+        return new ckXsdArrayType(ckString::ucfirst($elementTypeName).self::NAME_SUFFIX, ckXsdNamespace::get('tns'), $elementType);
       }
     }
 
@@ -96,11 +91,20 @@ class ckXsdArrayType extends ckXsdType
   }
 
   /**
-   * @see ckDOMSerializable::getNodeName()
+   * @see ckXsdComplexType::getElements()
    */
-  public function getNodeName()
+  public function getElements()
   {
-    return self::ELEMENT_NAME;
+    return array(new ckXsdComplexTypeElement('item', $this->getElementType(), '0', 'unbound'));
+  }
+
+  /**
+   * Hides ckXsdComplexType::addElement(), does nothing.
+   *
+   * @see ckXsdComplexType::addElement()
+   */
+  public function addElement(ckXsdComplexTypeElement $element)
+  {
   }
 
   /**
@@ -115,31 +119,5 @@ class ckXsdArrayType extends ckXsdType
     parent::__construct($name, $namespace);
 
     $this->setElementType($elementType);
-  }
-
-  /**
-   * @see ckDOMSerializable::serialize()
-   */
-  public function serialize(DOMDocument $document)
-  {
-    $xsd = ckXsdNamespace::get('xsd');
-
-    $node = $document->createElementNS($xsd->getUrl(), $xsd->qualify($this->getNodeName()));
-    $node->setAttribute('name', $this->getName());
-
-    $attr = $document->createElementNS($xsd->getUrl(), $xsd->qualify('attribute'));
-    $attr->setAttribute('ref', 'soapenc:arrayType');
-    $attr->setAttribute('wsdl:arrayType', $this->getElementType()->getQualifiedName().self::ARRAY_SUFFIX);
-
-    $restriction = $document->createElementNS($xsd->getUrl(), $xsd->qualify('restriction'));
-    $restriction->setAttribute('base', 'soapenc:Array');
-    $restriction->appendChild($attr);
-
-    $complexContent = $document->createElementNS($xsd->getUrl(), $xsd->qualify('complexContent'));
-    $complexContent->appendChild($restriction);
-
-    $node->appendChild($complexContent);
-
-    return $node;
   }
 }

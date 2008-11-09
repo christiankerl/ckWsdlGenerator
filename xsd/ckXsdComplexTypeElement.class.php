@@ -38,6 +38,20 @@ class ckXsdComplexTypeElement implements ckDOMSerializable
   protected $type;
 
   /**
+   * The minimum occurs of the element.
+   *
+   * @var string
+   */
+  protected $minOccurs;
+
+  /**
+   * The maximum occurs of the element.
+   *
+   * @var string
+   */
+  protected $maxOccurs;
+
+  /**
    * Gets the name of the element.
    *
    * @return string The name of the element
@@ -78,6 +92,46 @@ class ckXsdComplexTypeElement implements ckDOMSerializable
   }
 
   /**
+   * Gets the minimum occurs of the element.
+   *
+   * @return string The minimum occurs of the element
+   */
+  public function getMinOccurs()
+  {
+    return $this->minOccurs;
+  }
+
+  /**
+   * Sets the minimum occurs of the element.
+   *
+   * @param string $value The minimum occurs of the element
+   */
+  public function setMinOccurs($value)
+  {
+    $this->minOccurs = $value;
+  }
+
+  /**
+   * Gets the maximum occurs of the element.
+   *
+   * @return string The maximum occurs of the element
+   */
+  public function getMaxOccurs()
+  {
+    return $this->maxOccurs;
+  }
+
+  /**
+   * Sets the maximum occurs of the element.
+   *
+   * @param string $value The maximum occurs of the element
+   */
+  public function setMaxOccurs($value)
+  {
+    $this->maxOccurs = $value;
+  }
+
+  /**
    * @see ckDOMSerializable::getNodeName()
    */
   public function getNodeName()
@@ -88,13 +142,17 @@ class ckXsdComplexTypeElement implements ckDOMSerializable
   /**
    * Constructor initializing the element with a given name and a given type.
    *
-   * @param string    $name The name of the element
-   * @param ckXsdType $type The type of the element
+   * @param string    $name      The name of the element
+   * @param ckXsdType $type      The type of the element
+   * @param string    $minOccurs The minimum occurs of the element
+   * @param string    $maxOccurs The maximum occurs of the element
    */
-  public function __construct($name, ckXsdType $type)
+  public function __construct($name, ckXsdType $type, $minOccurs = null, $maxOccur = null)
   {
     $this->setName($name);
     $this->setType($type);
+    $this->setMinOccurs($minOccurs);
+    $this->setMaxOccurs($maxOccur);
   }
 
   /**
@@ -107,6 +165,16 @@ class ckXsdComplexTypeElement implements ckDOMSerializable
     $node = $document->createElementNS($xsd->getUrl(), $xsd->qualify($this->getNodeName()));
     $node->setAttribute('name', $this->getName());
     $node->setAttribute('type', $this->getType()->getQualifiedName());
+
+    if(!is_null($this->getMinOccurs()))
+    {
+      $node->setAttribute('minOccurs', $this->getMinOccurs());
+    }
+
+    if(!is_null($this->getMaxOccurs()))
+    {
+      $node->setAttribute('maxOccurs', $this->getMaxOccurs());
+    }
 
     return $node;
   }
