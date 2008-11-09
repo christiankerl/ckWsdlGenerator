@@ -42,6 +42,10 @@ abstract class ckXsdType implements ckDOMSerializable
     {
       return self::set($typeName, ckXsdSimpleType::create($typeName));
     }
+    else if($typeName == 'array')
+    {
+      return self::set($typeName, ckXsdArrayType::create('anyType'.ckXsdArrayType::ARRAY_SUFFIX));
+    }
     else if(ckXsdArrayType::isArrayType($typeName))
     {
       return self::set($typeName, ckXsdArrayType::create($typeName));
