@@ -49,7 +49,7 @@ class ckXsdArrayType extends ckXsdType
 
       if(!is_null($elementType))
       {
-        return new ckXsdArrayType(self::NAME_PREFIX.$elementTypeName, ckXsdNamespace::get('tns'), $elementType);
+        return new ckXsdArrayType(self::NAME_PREFIX.ckString::ucfirst($elementTypeName), ckXsdNamespace::get('tns'), $elementType);
       }
     }
 

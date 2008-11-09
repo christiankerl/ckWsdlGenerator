@@ -179,7 +179,7 @@ class ckWsdlGenerator
     $def->addBinding($binding);
     $def->addService($service);
 
-    $doc = new DOMDocument();
+    $doc = new DOMDocument('1.0', 'utf-8');
     $doc->formatOutput = true;
     $doc->appendChild($def->serialize($doc));
 

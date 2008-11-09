@@ -126,7 +126,6 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
     $header_node->setAttribute('message', $tns->qualify($message->getName()));
     $header_node->setAttribute('part', $part->getName());
     $header_node->setAttribute('use', 'literal');
-    $header_node->setAttribute('namespace', $tns->getUrl());
     $header_node->setAttribute('encodingStyle', $soapenc->getUrl());
 
     return $header_node;

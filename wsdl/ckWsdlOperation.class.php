@@ -37,6 +37,7 @@ class ckWsdlOperation implements ckDOMSerializable
     $return  = ckDocBlockParser::parseReturn($method->getDocComment());
 
     $result->input = new ckWsdlMessage($name.'Request');
+    $result->output = new ckWsdlMessage($name.'Response');
 
     foreach($params as $param)
     {
@@ -53,9 +54,8 @@ class ckWsdlOperation implements ckDOMSerializable
       ckXsdType::set($header['type'], null);
 
       $result->input->addPart(new ckWsdlPart($header['name'], $type, true));
+      $result->output->addPart(new ckWsdlPart($header['name'], $type, true));
     }
-
-    $result->output = new ckWsdlMessage($name.'Response');
 
     if(!empty($return))
     {
@@ -185,7 +185,7 @@ class ckWsdlOperation implements ckDOMSerializable
       $input_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('input'));
       $input_node->setAttribute('message', $tns->qualify($this->getInput()->getName()));
 
-      $node->setAttribute('parameterOrder', implode(' ', $this->getInput()->getBodyParts()));
+      $node->setAttribute('parameterOrder', implode(' ', $this->getInput()->getParts()));
       $node->appendChild($input_node);
     }
 
