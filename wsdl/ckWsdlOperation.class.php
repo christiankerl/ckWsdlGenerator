@@ -61,7 +61,7 @@ class ckWsdlOperation implements ckDOMSerializable
     {
       $type = ckXsdType::get($return['type']);
 
-      $result->output->addPart(new ckWsdlPart('return', $type));
+      $result->output->addPart(new ckWsdlPart('result', $type));
     }
 
     return $result;
