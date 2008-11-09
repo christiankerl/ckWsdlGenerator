@@ -140,7 +140,7 @@ class ckWsdlPart implements ckDOMSerializable
     $attr   = 'type';
     $suffix = '';
 
-    if($this->getType() instanceof ckXsdComplexType)
+    if($this->getType() instanceof ckXsdComplexType && $this->isHeader())
     {
       $attr = 'element';
       $suffix = ckXsdComplexType::ELEMENT_SUFFIX;
