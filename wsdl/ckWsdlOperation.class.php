@@ -39,13 +39,6 @@ class ckWsdlOperation implements ckDOMSerializable
     $result->input = new ckWsdlMessage($name.'Request');
     $result->output = new ckWsdlMessage($name.'Response');
 
-    foreach($params as $param)
-    {
-      $type = ckXsdType::get($param['type']);
-
-      $result->input->addPart(new ckWsdlPart($param['name'], $type));
-    }
-
     foreach($headers as $header)
     {
       $type = ckXsdType::get($header['type']);
@@ -55,6 +48,13 @@ class ckWsdlOperation implements ckDOMSerializable
 
       $result->input->addPart(new ckWsdlPart($header['name'], $type, true));
       $result->output->addPart(new ckWsdlPart($header['name'], $type, true));
+    }
+
+    foreach($params as $param)
+    {
+      $type = ckXsdType::get($param['type']);
+
+      $result->input->addPart(new ckWsdlPart($param['name'], $type));
     }
 
     if(!empty($return))
