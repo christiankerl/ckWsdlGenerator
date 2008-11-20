@@ -21,37 +21,37 @@ class ckDocBlockParser
    * Pattern for '@param' tag with the type name, the variable name and an optional description.
    */
   //                               *   @param   (    type_name    )    $(  var_name  )    ( desc )
-  const PARAM_PATTERN     = '|^\s*\*\s*@param\s+([0-9A-Za-z_\[\]]+)\s+\$([0-9A-Za-z_]+)\s*(.*)$|';
+  const PARAM_PATTERN     = '#^\s*\*\s*@param\s+([0-9A-Za-z_\[\]]+)\s+\$([0-9A-Za-z_]+)\s*(.*)$#';
 
   /**
    * Pattern for '@return' tag with the type name and an optional description.
    */
   //                               *   @return   (    type_name    )   ( desc )
-  const RETURN_PATTERN    = '|^\s*\*\s*@return\s+([0-9A-Za-z_\[\]]+)\s*(.*)$|';
+  const RETURN_PATTERN    = '#^\s*\*\s*@return\s+([0-9A-Za-z_\[\]]+)\s*(.*)$#';
 
   /**
    * Pattern for '@var' tag with the type name and an optional description.
    */
-  //                               *   @var   (    type_name    )   ( desc )
-  const PROPERTY_PATTERN  = '|^\s*\*\s*@var\s+([0-9A-Za-z_\[\]]+)\s*(.*)$|';
+  //                                 / *   *   @var   (    type_name    )   ( desc ) */
+  const PROPERTY_PATTERN  = '#^\s*(?:/\*|)\*\s*@var\s+([0-9A-Za-z_\[\]]+)\s*(.*?)(?:\*/|)\s*$#';
 
   /**
    * Pattern for '@ws-header' tag with the header name and the type name.
    */
   //                               *   @ws-header      ( header_name ) :   (    type_name    )
-  const WSHEADER_PATTERN  = '|^\s*\*\s*@ws-header\s+(?:([0-9A-Za-z_]+)\:\s+([0-9A-Za-z_\[\]]+))\s*$|';
+  const WSHEADER_PATTERN  = '#^\s*\*\s*@ws-header\s+(?:([0-9A-Za-z_]+)\:\s+([0-9A-Za-z_\[\]]+))\s*$#';
 
   /**
    * Pattern for '@ws-method' tag with the method name.
    */
   //                               *   @ws-method      ( method_name )
-  const WSMETHOD_PATTERN  = '|^\s*\*\s*@ws-method\s+([0-9A-Za-z_]+)\s*$|';
+  const WSMETHOD_PATTERN  = '#^\s*\*\s*@ws-method\s+([0-9A-Za-z_]+)\s*$#';
 
   /**
    * Pattern for any tag starting with '@', contains a placeholder for the tag name replaceable with {@link sprintf()}.
    */
-  //                               *   @<>
-  const ANYDOCTAG_PATTERN = '|^\s*\*\s*@%s.*$|';
+  //                                 / *   *   @<>       */
+  const ANYDOCTAG_PATTERN = '#^\s*(?:/\*|)\*\s*@%s.*?(?:\*/|)\s*$#';
 
   /**
    * The mode for {@link count()} to enable recursive counting of arrays.
