@@ -185,7 +185,10 @@ class ckWsdlOperation implements ckDOMSerializable
       $input_node = $document->createElementNS($wsdl->getUrl(), $wsdl->qualify('input'));
       $input_node->setAttribute('message', $tns->qualify($this->getInput()->getName()));
 
-      $node->setAttribute('parameterOrder', implode(' ', $this->getInput()->getParts()));
+      if(!empty($this->getInput()->getParts()))
+      {
+        $node->setAttribute('parameterOrder', ckString::implode(' ', $this->getInput()->getParts()));
+      }
       $node->appendChild($input_node);
     }
 

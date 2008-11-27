@@ -12,7 +12,7 @@
 /**
  * ckString provides methods for string manipulation.
  *
- * @package    ckWebServicePlugin
+ * @package    ckWsdlGenerator
  * @subpackage util
  * @author     Christian Kerl <christian-kerl@web.de>
  */
@@ -76,6 +76,23 @@ class ckString
     if(is_string($str) && is_string($substr) && strlen($str) >= strlen($substr))
     {
       return $substr == substr($str, strlen($str) - strlen($substr));
+    }
+  }
+
+  /**
+   * Fixes a bug in PHP < 5.2 where implode() doesn't call object's __toString() method.
+   *
+   * @see implode()
+   */
+  public static function implode($delimiter, $array)
+  {
+    if(version_compare(PHP_VERSION, '5.2.0', '>='))
+    {
+      return implode($delimiter, $array);
+    }
+    else
+    {
+      return implode($delimiter, array_map('strval', $array));
     }
   }
 }

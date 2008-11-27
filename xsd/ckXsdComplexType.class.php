@@ -29,6 +29,31 @@ class ckXsdComplexType extends ckXsdType
   const ELEMENT_SUFFIX = 'Element';
 
   /**
+   * Enter description here...
+   *
+   * @param ReflectionAnnotatedClass $class
+   *
+   * @return ckAbstractPropertyStrategy
+   */
+  protected static function getPropertyStrategy(ReflectionAnnotatedClass $class)
+  {
+    $strategy = null;
+
+    if($class->hasAnnotation('PropertyStrategy'))
+    {
+      $strategy = $class->getAnnotation('PropertyStrategy')->value;
+
+      $strategy = new $strategy($class);
+    }
+    if(is_null($strategy) || !$strategy instanceof ckAbstractPropertyStrategy)
+    {
+      $strategy = new ckDefaultPropertyStrategy($class);
+    }
+
+    return $strategy;
+  }
+
+  /**
    * Creates a new complex type object for the given php class.
    *
    * @param string $name A name of a php class
@@ -37,17 +62,12 @@ class ckXsdComplexType extends ckXsdType
    */
   public static function create($name)
   {
-    $reflectClass= new ReflectionClass($name);
+    $reflectClass= new ReflectionAnnotatedClass($name);
     $result = new ckXsdComplexType($name, ckXsdNamespace::get('tns'));
 
-    foreach($reflectClass->getProperties() as $property)
+    foreach(self::getPropertyStrategy($reflectClass)->getProperties() as $property)
     {
-      $type = ckDocBlockParser::parseProperty($property->getDocComment());
-
-      if(!empty($type))
-      {
-        $result->addElement(new ckXsdComplexTypeElement($property->getName(), ckXsdType::get($type['type'])));
-      }
+      $result->addElement(new ckXsdComplexTypeElement($property['name'], ckXsdType::get($property['type'])));
     }
 
     return $result;

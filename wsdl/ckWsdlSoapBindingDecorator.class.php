@@ -97,7 +97,7 @@ class ckWsdlSoapBindingDecorator extends ckWsdlBindingDecorator
     $tns     = ckXsdNamespace::get('tns');
 
     $body_node = $document->createElementNS($soap->getUrl(), $soap->qualify('body'));
-    $body_node->setAttribute('parts', implode(' ', $message->getBodyParts()));
+    $body_node->setAttribute('parts', ckString::implode(' ', $message->getBodyParts()));
     $body_node->setAttribute('use', 'literal');
     $body_node->setAttribute('namespace', $tns->getUrl());
     $body_node->setAttribute('encodingStyle', $soapenc->getUrl());

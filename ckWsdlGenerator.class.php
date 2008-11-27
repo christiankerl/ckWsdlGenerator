@@ -9,6 +9,8 @@
  * @version   SVN: $Id$
  */
 
+include_once(dirname(__FILE__).'/vendor/addendum/annotations.php');
+
 /**
  * ckWsdlGenerator provides methods to generate a webservice definition in wsdl format from php methods.
  *
