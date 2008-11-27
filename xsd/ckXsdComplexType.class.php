@@ -29,11 +29,12 @@ class ckXsdComplexType extends ckXsdType
   const ELEMENT_SUFFIX = 'Element';
 
   /**
-   * Enter description here...
+   * Gets the ckAbstractPropertyStrategy for a given class from the PropertyStrategy annotation,
+   * if no annotation is found ckDefaultPropertyStrategy is returned.
    *
-   * @param ReflectionAnnotatedClass $class
+   * @param ReflectionAnnotatedClass $class A ReflectionAnnotatedClass object
    *
-   * @return ckAbstractPropertyStrategy
+   * @return ckAbstractPropertyStrategy The ckAbstractPropertyStrategy implementation
    */
   protected static function getPropertyStrategy(ReflectionAnnotatedClass $class)
   {
