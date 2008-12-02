@@ -92,7 +92,24 @@ class ckString
     }
     else
     {
-      return implode($delimiter, array_map('strval', $array));
+      return implode($delimiter, array_map(array(__CLASS__, 'strval'), $array));
+    }
+  }
+
+  /**
+   * Fixes strval() not calling object's __toString() method.
+   *
+   * @see strval()
+   */
+  private static function strval($object)
+  {
+    if(is_object($object) && method_exists($object, '__toString'))
+    {
+      return $object->__toString();
+    }
+    else
+    {
+      return strval($object);
     }
   }
 }
