@@ -44,7 +44,7 @@ class ckXsdArrayType extends ckXsdComplexType
 
       if(!is_null($elementType))
       {
-        return new ckXsdArrayType(ckString::ucfirst($elementTypeName).self::NAME_SUFFIX, ckXsdNamespace::get('tns'), $elementType);
+        return new ckXsdArrayType(ckString::ucfirst($elementType->getName()).self::NAME_SUFFIX, ckXsdNamespace::get('tns'), $elementType);
       }
     }
 
