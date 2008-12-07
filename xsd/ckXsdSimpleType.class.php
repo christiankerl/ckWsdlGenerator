@@ -23,14 +23,14 @@ class ckXsdSimpleType extends ckXsdType
    *
    * @var array
    */
-  protected static $SIMPLE_TYPES = array('boolean', 'int', 'float', 'string', 'anyType');
+  protected static $SIMPLE_TYPES = array('boolean', 'int', 'double', 'string', 'anyType');
 
   /**
    * An array with alternative names for simple xsd types as keys and their corresponding type as values.
    *
    * @var array
    */
-  protected static $ALIAS = array('integer' => 'int', 'bool' => 'boolean');
+  protected static $ALIAS = array('integer' => 'int', 'bool' => 'boolean', 'float' => 'double');
 
   /**
    * Checks wether the given type is a simple xsd type.
