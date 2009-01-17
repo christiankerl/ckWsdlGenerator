@@ -78,7 +78,7 @@ class ckWsdlGenerator
 
     foreach($this->methods as $method)
     {
-      $portType->addOperation(ckWsdlOperation::create($name, $method));
+      $portType->addOperation(ckWsdlOperation::create($method));
     }
 
     $binding = new ckWsdlSoapBindingDecorator();

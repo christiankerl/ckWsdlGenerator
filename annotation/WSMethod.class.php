@@ -54,19 +54,19 @@ class WSMethod extends Annotation
    *
    * @var array
    */
-  public $webservice;
+  public $webservice = array();
 
   /**
    * (non-PHPdoc)
    * @see vendor/addendum/Annotation#checkConstraints()
    */
-  protected function checkConstraints(ReflectionMethod $target)
+  protected function checkConstraints($target)
   {
     $name = !ckString::isNullOrEmpty($this->name) ? $this->name : $this->value;
 
     $this->name = !ckString::isNullOrEmpty($name) ? $name : $this->invokeCreateMethodNameCallback($target);
 
-    if(!is_array($this->webservice))
+    if(!is_array($this->webservice) && !is_null($this->webservice))
     {
       $this->webservice = array($this->webservice);
     }
@@ -81,7 +81,7 @@ class WSMethod extends Annotation
    */
   protected function invokeCreateMethodNameCallback(ReflectionMethod $target)
   {
-    $callback = is_null(self::$createMethodNameCallback) ? array($this, 'getReflectionTargetName') : self::$createMethodNameCallback;
+    $callback = is_null(self::$createMethodNameCallback) ? array($this, 'getReflectionMethodName') : self::$createMethodNameCallback;
 
     return call_user_func($callback, $target);
   }
