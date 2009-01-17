@@ -27,6 +27,13 @@ class ckWsdlGenerator
   protected $context = null;
 
   /**
+   * An array of ReflectionAnnotatedMethod objects, which should be added to the webservice.
+   *
+   * @var array
+   */
+  protected $methods = array();
+
+  /**
    * Constructor initializing the wsdl generator with a given wsdl generator context.
    *
    * @param $context A wsdl generator context

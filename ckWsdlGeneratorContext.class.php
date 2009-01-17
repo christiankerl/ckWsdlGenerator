@@ -74,7 +74,7 @@ class ckWsdlGeneratorContext
   {
     if(ckString::isNullOrEmpty($this->location))
     {
-      $this->location = $this->getNamespace().$this->getName().'.php';
+      $this->location = $this->getNamespace()->getUrl().$this->getName().'.php';
     }
 
     return $this->location;
