@@ -19,35 +19,36 @@
 class ckWsdlOperation implements ckDOMSerializable
 {
   /**
-   * Creates a new operation with a given name from a given php method.
+   * Creates a new operation with from a given annotated php method.
    *
-   * @param string           $name   The name of the operation
-   * @param ReflectionMethod $method A php method
+   * @param ReflectionAnnotatedMethod $method An annotated php method
    *
    * @return ckWsdlOperation An operation, which's input corresponds to the parameters and which's output
    *                         corresponds to the return value of the given php method.
    */
-  public static function create($name, ReflectionMethod $method)
+  public static function create(ReflectionAnnotatedMethod $method)
   {
+    $name = $method->getAnnotation('WSMethod')->name;
+
     $result = new ckWsdlOperation();
     $result->setName($name);
 
     $params  = ckDocBlockParser::parseParameters($method->getDocComment());
-    $headers = ckDocBlockParser::parseHeader($method->getDocComment());
     $return  = ckDocBlockParser::parseReturn($method->getDocComment());
+    $headers = $method->getAllAnnotations('WSHeader');
 
     $result->input = new ckWsdlMessage($name.'Request');
     $result->output = new ckWsdlMessage($name.'Response');
 
     foreach($headers as $header)
     {
-      $type = ckXsdType::get($header['type']);
-      $type->setName($header['name']);
-      ckXsdType::set($header['name'], $type);
-      ckXsdType::set($header['type'], null);
+      $type = ckXsdType::get($header->type);
+      $type->setName($header->name);
+      ckXsdType::set($header->name, $type);
+      ckXsdType::set($header->type, null);
 
-      $result->input->addPart(new ckWsdlPart($header['name'], $type, true));
-      $result->output->addPart(new ckWsdlPart($header['name'], $type, true));
+      $result->input->addPart(new ckWsdlPart($header->name, $type, true));
+      $result->output->addPart(new ckWsdlPart($header->name, $type, true));
     }
 
     foreach($params as $param)

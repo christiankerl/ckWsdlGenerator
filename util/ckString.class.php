@@ -112,4 +112,16 @@ class ckString
       return strval($object);
     }
   }
+
+  /**
+   * Checks wether a given string is null or the empty string.
+   *
+   * @param string $str A string
+   *
+   * @return bool True, if the given string is null or the empty string, false otherwise.
+   */
+  public static function isNullOrEmpty($str)
+  {
+    return is_null($str) || $str == '';
+  }
 }

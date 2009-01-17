@@ -9,7 +9,7 @@
  * @version   SVN: $Id$
  */
 
-include_once(dirname(__FILE__).'/vendor/addendum/annotations.php');
+require_once(dirname(__FILE__).'/vendor/addendum/annotations.php');
 
 /**
  * ckWsdlGenerator provides methods to generate a webservice definition in wsdl format from php methods.
@@ -20,122 +20,34 @@ include_once(dirname(__FILE__).'/vendor/addendum/annotations.php');
 class ckWsdlGenerator
 {
   /**
-   * The tag that has to be present in a method's doc comment block, when {@link checkEnablement} is set to true.
+   * The wsdl generator context representing the webservice to generate.
+   *
+   * @var ckWsdlGeneratorContext
    */
-  const ENABLEMENT_DOCTAG = 'ws-enable';
+  protected $context = null;
 
   /**
-   * The name of the webservice.
+   * Constructor initializing the wsdl generator with a given wsdl generator context.
    *
-   * @var string
+   * @param $context A wsdl generator context
    */
-  protected $name;
-
-  /**
-   * The targetnamespace of the wsdl document.
-   *
-   * @var ckXsdNamespace
-   */
-  protected $namespace;
-
-  /**
-   * The webservice endpoint.
-   *
-   * @var string
-   */
-  protected $endpoint;
-
-  /**
-   * Wether a method's doc comment block is checked for the presence of the {@link ENABLEMENT_DOCTAG}.
-   *
-   * @var boolean
-   */
-  protected $checkEnablement = false;
-
-  /**
-   * An array of ReflectionMethod objects representng methods, which should be added to the webservice.
-   *
-   * @var array
-   */
-  protected $methods = array();
-
-  /**
-   * Gets the webservice name.
-   *
-   * @return string The webservice name
-   */
-  public function getName()
+  public function __construct(ckWsdlGeneratorContext $context)
   {
-    return $this->name;
+    $this->context = $context;
   }
 
   /**
-   * Gets the targetnamespace of the wsdl document.
+   * Adds a given annotated php method to the webservice definition.
    *
-   * @return ckXsdNamespace The targetnamespace of the wsdl document
-   */
-  public function getNamespace()
-  {
-    return $this->namespace;
-  }
-
-  /**
-   * Gets the webservice endpoint.
-   *
-   * @return string The webservice endpoint
-   */
-  public function getEndpoint()
-  {
-    return $this->endpoint;
-  }
-
-  /**
-   * Get wether a method's doc comment block is checked for the presence of the {@link ENABLEMENT_DOCTAG}, before it is added to the webservice definition.
-   *
-   * @return boolean True, if the check is enabled, false otherwise
-   */
-  public function getCheckEnablement()
-  {
-    return $this->checkEnablement;
-  }
-
-  /**
-   * Set wether a method's doc comment block is checked for the presence of the {@link ENABLEMENT_DOCTAG}, before it is added to the webservice definition.
-   *
-   * @param boolean $value A boolean determining if the check should be enabled.
-   */
-  public function setCheckEnablement($value)
-  {
-    $this->checkEnablement = $value;
-  }
-
-  /**
-   * Constructor initializing the wsdl generator.
-   *
-   * @param string $name      The webservice name
-   * @param string $namespace The targetnamespace of the wsdl document
-   * @param string $endpoint  The webservice endpoint
-   */
-  public function __construct($name, $namespace, $endpoint)
-  {
-    $this->name = $name;
-    $this->namespace = ckXsdNamespace::set('tns', $this->normalizeNamespaceUri($namespace));
-    $this->endpoint = $endpoint;
-  }
-
-  /**
-   * Adds a method under a given name to the webservice definition and performs the enablement check if {@link checkEnablement} is set to true.
-   *
-   * @param string           $name   The name of the method in the webservice definition
-   * @param ReflectionMethod $method A ReflectionMethod object representing the method, which should be added to the webservice
+   * @param ReflectionAnnotatedMethod $method A ReflectionAnnotatedMethod object representing the method, which should be added to the webservice
    *
    * @return boolean True if the method was succesfully added, false otherwise
    */
-  public function addMethod($name, ReflectionMethod $method)
+  public function addMethod(ReflectionAnnotatedMethod $method)
   {
-    if(!$this->getCheckEnablement() || ckDocBlockParser::hasDocTag($method->getDocComment(), self::ENABLEMENT_DOCTAG))
+    if($this->context->matchesContext($method))
     {
-      $this->methods[$name] = $method;
+      $this->methods[] = $method;
 
       return true;
     }
@@ -155,28 +67,28 @@ class ckWsdlGenerator
   public function save($file = null)
   {
     $portType = new ckWsdlPortType();
-    $portType->setName($this->getName().'PortType');
+    $portType->setName($this->context->getName().'PortType');
 
-    foreach($this->methods as $name => $method)
+    foreach($this->methods as $method)
     {
       $portType->addOperation(ckWsdlOperation::create($name, $method));
     }
 
     $binding = new ckWsdlSoapBindingDecorator();
-    $binding->setName($this->getName().'Binding');
+    $binding->setName($this->context->getName().'Binding');
     $binding->setPortType($portType);
 
     $port = new ckWsdlSoapPortDecorator();
-    $port->setName($this->getName().'Port');
-    $port->setLocation($this->getEndpoint());
+    $port->setName($this->context->getName().'Port');
+    $port->setLocation($this->context->getLocation());
     $port->setBinding($binding);
 
     $service = new ckWsdlService();
-    $service->setName($this->getName().'Service');
+    $service->setName($this->context->getName().'Service');
     $service->addPort($port);
 
     $def = new ckWsdlDefinitions();
-    $def->setName($this->getName());
+    $def->setName($this->context->getName());
     $def->addPortType($portType);
     $def->addBinding($binding);
     $def->addService($service);
@@ -193,17 +105,5 @@ class ckWsdlGenerator
     }
 
     return $content;
-  }
-
-  /**
-   * Normalizes a namespace uri, this means adding a slash at the end of the uri, if none is present.
-   *
-   * @param string $namespace The namespace uri to normalize
-   *
-   * @return string The normalized namespace uri
-   */
-  private function normalizeNamespaceUri($namespace)
-  {
-    return !ckString::endsWith($namespace, '/') ? $namespace.'/' : $namespace;
   }
 }
