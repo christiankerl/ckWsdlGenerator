@@ -21,6 +21,32 @@
 abstract class ckAbstractPropertyStrategy
 {
   /**
+   * Gets the ckAbstractPropertyStrategy implementation for a given class from the PropertyStrategy annotation,
+   * if no annotation is found ckDefaultPropertyStrategy is returned.
+   *
+   * @param ReflectionAnnotatedClass $class A ReflectionAnnotatedClass object
+   *
+   * @return ckAbstractPropertyStrategy The ckAbstractPropertyStrategy implementation
+   */
+  public static function getPropertyStrategy(ReflectionAnnotatedClass $class)
+  {
+    $strategy = null;
+
+    if($class->hasAnnotation('PropertyStrategy'))
+    {
+      $strategy = $class->getAnnotation('PropertyStrategy')->value;
+
+      $strategy = new $strategy($class);
+    }
+    if(is_null($strategy) || !$strategy instanceof ckAbstractPropertyStrategy)
+    {
+      $strategy = new ckDefaultPropertyStrategy($class);
+    }
+
+    return $strategy;
+  }
+
+  /**
    * The associated ReflectionClass.
    *
    * @var ReflectionClass
@@ -53,4 +79,23 @@ abstract class ckAbstractPropertyStrategy
    * @return array An array which contains foreach property an array with a 'name' and a 'type' entry
    */
   public abstract function getProperties();
+
+  /**
+   * Gets the value of a given property from a given object.
+   *
+   * @param object $object   An object
+   * @param string $property The property name
+   *
+   * @return mixed The value of the property
+   */
+  public abstract function getPropertyValue($object, $property);
+
+  /**
+   * Sets the value of a given property on a given object.
+   *
+   * @param object $object   An object
+   * @param string $property The property name
+   * @param mixed  $value    The value
+   */
+  public abstract function setPropertyValue($object, $property, $value);
 }

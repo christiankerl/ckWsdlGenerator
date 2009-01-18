@@ -19,7 +19,8 @@
 class ckDefaultPropertyStrategy extends ckAbstractPropertyStrategy
 {
   /**
-   * @see ckAbstractPropertyStrategy::__construct()
+   * (non-PHPdoc)
+   * @see strategy/ckAbstractPropertyStrategy#__construct()
    */
   public function __construct(ReflectionClass $class)
   {
@@ -27,7 +28,8 @@ class ckDefaultPropertyStrategy extends ckAbstractPropertyStrategy
   }
 
   /**
-   * @see ckAbstractPropertyStrategy::getProperties()
+   * (non-PHPdoc)
+   * @see strategy/ckAbstractPropertyStrategy#getProperties()
    */
   public function getProperties()
   {
@@ -35,6 +37,11 @@ class ckDefaultPropertyStrategy extends ckAbstractPropertyStrategy
 
     foreach($this->getClass()->getProperties() as $property)
     {
+      if(!$property->isPublic() || $property->isStatic())
+      {
+        continue;
+      }
+
       $type = ckDocBlockParser::parseProperty($property->getDocComment());
 
       if(isset($type['type']))
@@ -44,5 +51,33 @@ class ckDefaultPropertyStrategy extends ckAbstractPropertyStrategy
     }
 
     return $properties;
+  }
+
+  /**
+   * (non-PHPdoc)
+   * @see strategy/ckAbstractPropertyStrategy#getPropertyValue()
+   */
+  public function getPropertyValue($object, $property)
+  {
+    if(!$this->getClass()->isInstance($object) || !$this->getClass()->hasProperty($property))
+    {
+      throw new InvalidArgumentException();
+    }
+
+    return $this->getClass()->getProperty($property)->getValue($object);
+  }
+
+  /**
+   * (non-PHPdoc)
+   * @see strategy/ckAbstractPropertyStrategy#setPropertyValue()
+   */
+  public function setPropertyValue($object, $property, $value)
+  {
+    if(!$this->getClass()->isInstance($object) || !$this->getClass()->hasProperty($property))
+    {
+      throw new InvalidArgumentException();
+    }
+
+    $this->getClass()->getProperty($property)->setValue($object, $value);
   }
 }
