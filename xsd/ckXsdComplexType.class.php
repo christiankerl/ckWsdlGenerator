@@ -40,6 +40,8 @@ class ckXsdComplexType extends ckXsdType
     $reflectClass= new ReflectionAnnotatedClass($name);
     $result = new ckXsdComplexType($name, ckXsdNamespace::get('tns'));
 
+    ckXsdType::set($name, $result);
+
     foreach(ckAbstractPropertyStrategy::getPropertyStrategy($reflectClass)->getProperties() as $property)
     {
       $result->addElement(new ckXsdComplexTypeElement($property['name'], ckXsdType::get($property['type'])));
