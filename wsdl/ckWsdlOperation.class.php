@@ -28,7 +28,7 @@ class ckWsdlOperation implements ckDOMSerializable
    */
   public static function create(ReflectionAnnotatedMethod $method)
   {
-    $name = $method->getAnnotation('WSMethod')->name;
+    $name = $method->getAnnotation('WSMethod')->getName();
 
     $result = new ckWsdlOperation();
     $result->setName($name);

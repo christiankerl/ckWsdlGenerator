@@ -107,7 +107,7 @@ class ckWsdlGeneratorContext
   {
     $hasAnnotation = ($annotation = $method->getAnnotation('WSMethod')) !== false;
 
-    return $hasAnnotation && ( (empty($annotation->webservice) && $this->default) || (array_search($this->name, $annotation->webservice) !== false));
+    return $hasAnnotation && ( (empty($annotation->getWebservice()) && $this->default) || (array_search($this->name, $annotation->getWebservice()) !== false));
   }
 
   /**

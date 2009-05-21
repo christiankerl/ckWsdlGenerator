@@ -47,14 +47,21 @@ class WSMethod extends Annotation
    *
    * @var string
    */
-  public $name;
+  protected $name;
 
   /**
    * The names of the webservices the annotated method is part of.
    *
    * @var array
    */
-  public $webservice = array();
+  protected $webservice = array();
+
+  /**
+   * The target method of this annotation.
+   *
+   * @var ReflectionAnnotatedMethod
+   */
+  protected $target;
 
   /**
    * (non-PHPdoc)
@@ -62,14 +69,38 @@ class WSMethod extends Annotation
    */
   protected function checkConstraints($target)
   {
-    $name = !ckString::isNullOrEmpty($this->name) ? $this->name : $this->value;
-
-    $this->name = !ckString::isNullOrEmpty($name) ? $name : $this->invokeCreateMethodNameCallback($target);
+    $this->name = !ckString::isNullOrEmpty($this->name) ? $this->name : $this->value;
+    $this->target = $target;
 
     if(!is_array($this->webservice) && !is_null($this->webservice))
     {
       $this->webservice = array($this->webservice);
     }
+  }
+
+  /**
+   * Gets the name of the method.
+   *
+   * @return string The method name
+   */
+  public function getName()
+  {
+    if(ckString::isNullOrEmpty($this->name))
+    {
+      $this->name = $this->invokeCreateMethodNameCallback($this->target);
+    }
+
+    return $this->name;
+  }
+
+  /**
+   * Gets the names of the webservices the annotated method is part of.
+   *
+   * @return array The webservice names
+   */
+  public function getWebservice()
+  {
+    return $this->webservice;
   }
 
   /**
