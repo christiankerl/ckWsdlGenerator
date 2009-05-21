@@ -106,8 +106,9 @@ class ckWsdlGeneratorContext
   public function matchesContext(ReflectionAnnotatedMethod $method)
   {
     $hasAnnotation = ($annotation = $method->getAnnotation('WSMethod')) !== false;
+    $webservices   = $annotation->getWebservice();
 
-    return $hasAnnotation && ( (empty($annotation->getWebservice()) && $this->default) || (array_search($this->name, $annotation->getWebservice()) !== false));
+    return $hasAnnotation && ( (empty($webservices) && $this->default) || (array_search($this->name, $webservices) !== false));
   }
 
   /**
