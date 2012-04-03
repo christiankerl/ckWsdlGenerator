@@ -35,12 +35,17 @@ class ckXsdComplexType extends ckXsdType
    *
    * @return ckXsdComplexType The complex type object
    */
-  public static function create($name)
+  public static function create($name, $alias = null)
   {
-    $reflectClass= new ReflectionAnnotatedClass($name);
-    $result = new ckXsdComplexType($name, ckXsdNamespace::get('tns'));
+    if (is_null($alias))
+    {
+      $alias = $name;
+    }
 
-    ckXsdType::set($name, $result);
+    $reflectClass= new ReflectionAnnotatedClass($name);
+    $result = new ckXsdComplexType($alias, ckXsdNamespace::get('tns'));
+
+    ckXsdType::set($alias, $result);
 
     foreach(ckAbstractPropertyStrategy::getPropertyStrategy($reflectClass)->getProperties() as $property)
     {
