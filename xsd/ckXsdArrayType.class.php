@@ -35,16 +35,21 @@ class ckXsdArrayType extends ckXsdComplexType
    *
    * @return ckXsdArrayType The array type object
    */
-  public static function create($name)
+  public static function create($name, $alias = null)
   {
     if(self::isArrayType($name))
     {
       $elementTypeName = substr($name, 0, -strlen(self::ARRAY_SUFFIX));
       $elementType = ckXsdType::get($elementTypeName);
 
+      if (is_null($alias))
+      {
+        $alias = ckString::ucfirst($elementType->getName()).self::NAME_SUFFIX;
+      }
+
       if(!is_null($elementType))
       {
-        return new ckXsdArrayType(ckString::ucfirst($elementType->getName()).self::NAME_SUFFIX, ckXsdNamespace::get('tns'), $elementType);
+        return new ckXsdArrayType($alias, ckXsdNamespace::get('tns'), $elementType);
       }
     }
 
