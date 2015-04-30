@@ -52,7 +52,15 @@ abstract class ckXsdType implements ckDOMSerializable
     }
     else if(class_exists($typeName, true))
     {
-      return self::set($typeName, ckXsdComplexType::create($typeName));
+      if(strpos($typeName, '\\') !== FALSE){
+        $namespaceAndClass = explode('\\', $typeName);
+        $class = end($namespaceAndClass);
+        $namespace = implode('\\', array_splice($namespaceAndClass, 0, -1));
+        return self::set($class, ckXsdComplexType::create($class, $namespace));
+      }
+      else{
+          return self::set($typeName, ckXsdComplexType::create($typeName));
+      }
     }
     else
     {
