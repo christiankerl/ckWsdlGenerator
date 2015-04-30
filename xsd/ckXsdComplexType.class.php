@@ -32,12 +32,16 @@ class ckXsdComplexType extends ckXsdType
    * Creates a new complex type object for the given php class.
    *
    * @param string $name A name of a php class
-   *
+   * @param string $classNamespace Namespace for the PHP class parameter
    * @return ckXsdComplexType The complex type object
    */
-  public static function create($name)
+  public static function create($name, $classNamespace = '')
   {
-    $reflectClass= new ReflectionAnnotatedClass($name);
+    if (empty($classNamespace)) {
+      $reflectClass = new ReflectionAnnotatedClass($name);
+    } else {
+      $reflectClass = new ReflectionAnnotatedClass($classNamespace . '\\' . $name);
+    }
     $result = new ckXsdComplexType($name, ckXsdNamespace::get('tns'));
 
     ckXsdType::set($name, $result);
